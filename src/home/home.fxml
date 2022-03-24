@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="home.Controller">
+    <MenuBar prefHeight="30.0" prefWidth="1000.0">
+        <Menu mnemonicParsing="false" text="Trello" >
+            <MenuItem mnemonicParsing="false" onAction="#refreshFrame" text="Actualiser" />
+            <MenuItem mnemonicParsing="false" onAction="#quitTrello" text="Quitter" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Equipe" >
+            <MenuItem mnemonicParsing="false" onAction="#goToFrameTeam" text="Voir l'Equipe du projet" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Tâche" >
+            <MenuItem mnemonicParsing="false" onAction="#goToFrameTask" text="Voir les Tâches" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Tag" >
+            <MenuItem mnemonicParsing="false" onAction="#goToFrameFlag" text="Voir les Tags" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Aide">
+            <MenuItem mnemonicParsing="false" text="A propos du groupe" />
+        </Menu>
+    </MenuBar>
+    <TabPane layoutX="150.0" layoutY="30.0" prefHeight="570.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab text="A faire">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <ScrollPane prefHeight="540.0" prefWidth="850.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                </ScrollPane>
+            </AnchorPane>
+        </Tab>
+        <Tab text="En cours">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </Tab>
+        <Tab text="Terminé">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </Tab>
+    </TabPane>
+    <TitledPane animated="false" layoutY="30.0" prefHeight="570.0" prefWidth="150.0" text="Tache selectionnée">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+            <ScrollPane prefHeight="570.0" prefWidth="150.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="562.0" prefWidth="131.0" />
+            </ScrollPane>
+        </AnchorPane>
+    </TitledPane>
+</AnchorPane>

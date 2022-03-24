@@ -60,7 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>fr.esgi.trello/fr.esgi.trello.HelloApplication</mainClass>
+                            <mainClass>src.main.Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>

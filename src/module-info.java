@@ -6,4 +6,8 @@ module Trello {
     requires javafx.graphics;
 
     opens main;
+    opens home;
+    opens team;
+    opens task;
+    opens flag;
 }
