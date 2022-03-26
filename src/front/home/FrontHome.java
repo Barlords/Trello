@@ -1,29 +1,24 @@
-package home;
+package front.home;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import main.Main;
-import task.Task;
+import front.main.Main;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public final class Home {
+public final class FrontHome {
 
-    private static Home instance = null;
+    private static FrontHome instance = null;
 
     public void start() throws IOException {
-        System.out.println("home page");
+        System.out.println("front.home page");
         Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
         Main.stage.show();
     }
 
-    public static Home getInstance() {
+    public static FrontHome getInstance() {
         if(null == instance) {
-            instance = new Home();
+            instance = new FrontHome();
         }
         return instance;
     }

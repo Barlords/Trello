@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="front.task.Controller">
+   <MenuBar prefHeight="30.0" prefWidth="1000.0">
+      <Menu mnemonicParsing="false" text="Trello" >
+         <MenuItem mnemonicParsing="false" onAction="#refreshFrame" text="Actualiser" />
+         <MenuItem mnemonicParsing="false" onAction="#quitTrello" text="Quitter" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="Equipe" >
+         <MenuItem mnemonicParsing="false" onAction="#viewAllMembers" text="Voir les Menbres du projet" />
+         <MenuItem mnemonicParsing="false" onAction="#addMember" text="Ajouter un Membre" />
+         <MenuItem mnemonicParsing="false" onAction="#deleteMember" text="Supprimer un Membre" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="Tâche" >
+         <MenuItem mnemonicParsing="false" onAction="#viewAllTasks" text="Voir les Tâches" />
+         <MenuItem mnemonicParsing="false" onAction="#addTask" text="Ajouter une Tâche" />
+         <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Supprimer une Tâche" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="Tag" >
+         <MenuItem mnemonicParsing="false" onAction="#viewAllFlags" text="Voir les Tags" />
+         <MenuItem mnemonicParsing="false" onAction="#addFlag" text="Ajouter un Tag" />
+         <MenuItem mnemonicParsing="false" onAction="#deleteFlag" text="Supprimer un Tag" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="Aide">
+         <MenuItem mnemonicParsing="false" text="A propos du groupe" />
+      </Menu>
+   </MenuBar>
+
+   <Button layoutX="462.0" layoutY="287.0" mnemonicParsing="false" onAction="#createTask" text="add Task" />
+
+
+</AnchorPane>
