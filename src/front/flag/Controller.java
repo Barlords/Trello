@@ -3,7 +3,6 @@ package front.flag;
 import back.objects.Flag;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import front.flag.FrontFlag;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -173,7 +172,7 @@ public class Controller {
 
         try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder response = new StringBuilder();
-            String responseLine = null;
+            String responseLine;
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
@@ -183,7 +182,7 @@ public class Controller {
         return flags;
     }
 
-    public int createFlag() throws IOException {
+    public int createFlag() {
 
         try {
             TextField tf_name = (TextField) Main.stage.getScene().lookup("#name");
@@ -205,7 +204,7 @@ public class Controller {
 
             try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
                 StringBuilder response = new StringBuilder();
-                String responseLine = null;
+                String responseLine;
                 while ((responseLine = br.readLine()) != null) {
                     response.append(responseLine.trim());
                 }
@@ -232,7 +231,7 @@ public class Controller {
 
         try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder response = new StringBuilder();
-            String responseLine = null;
+            String responseLine;
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
