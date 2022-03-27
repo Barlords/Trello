@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import front.main.Main;
 import front.task.FrontTask;
 import front.team.FrontTeam;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -184,6 +186,9 @@ public class Controller {
     public int createFlag() throws IOException {
 
         try {
+            TextField tf_name = (TextField) Main.stage.getScene().lookup("#name");
+            TextArea ta_description = (TextArea) Main.stage.getScene().lookup("#description");
+
             URL url = new URL ("http://localhost:3000/flags");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
@@ -191,7 +196,7 @@ public class Controller {
             con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
 
-            String requestJson = new Flag("urgent", "à réaliser rapidement").toJSON();
+            String requestJson = new Flag(tf_name.getText(), ta_description.getText()).toJSON();
 
             try(OutputStream os = con.getOutputStream()) {
                 byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
@@ -216,7 +221,10 @@ public class Controller {
     }
 
     public int deleteFlag() throws IOException {
-        URL url = new URL ("http://localhost:3000/flags?name=urgent");
+        TextField tf_name = (TextField) Main.stage.getScene().lookup("#name");
+        String name = tf_name.getText().replace(" ", "%20");
+
+        URL url = new URL ("http://localhost:3000/flags?name="+name);
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("DELETE");
         con.setRequestProperty("Accept", "application/json");

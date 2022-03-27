@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import front.main.Main;
 import back.objects.User;
 import front.task.FrontTask;
+import javafx.scene.control.TextField;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -140,6 +141,7 @@ public class Controller {
         goToFrameFlag("delete");
     }
 
+
     private void goToFrameFlag(String action) throws IOException {
         switch (action) {
             case "viewAll" :
@@ -166,6 +168,8 @@ public class Controller {
     public int createUser() throws IOException {
 
         try {
+            TextField tf = (TextField) Main.stage.getScene().lookup("#pseudo");
+
             URL url = new URL ("http://localhost:3000/users");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
@@ -173,7 +177,7 @@ public class Controller {
             con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
 
-            String requestJson = new User("the best").toJSON();
+            String requestJson = new User(tf.getText()).toJSON();
 
             try(OutputStream os = con.getOutputStream()) {
                 byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
@@ -251,7 +255,11 @@ public class Controller {
     }
 
     public int deleteUser() throws IOException {
-        URL url = new URL ("http://localhost:3000/users?pseudo=the%20best");
+
+        TextField tf = (TextField) Main.stage.getScene().lookup("#pseudo");
+        String pseudo = tf.getText().replace(" ", "%20");
+
+        URL url = new URL ("http://localhost:3000/users?pseudo="+pseudo);
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("DELETE");
         con.setRequestProperty("Accept", "application/json");
