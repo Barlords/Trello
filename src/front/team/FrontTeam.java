@@ -1,12 +1,9 @@
 package front.team;
 
-import back.objects.Flag;
-import back.objects.User;
 import javafx.fxml.FXMLLoader;
-import front.main.Main;
+import front.main.GUIApp;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 public final class FrontTeam {
@@ -16,8 +13,8 @@ public final class FrontTeam {
     public void start() throws IOException {
         System.out.println("front.team page");
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTeam.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTeam.fxml"))));
+        GUIApp.stage.show();
     }
 
     public static FrontTeam getInstance() {
@@ -32,8 +29,8 @@ public final class FrontTeam {
 
         //TODO : view users
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTeam.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTeam.fxml"))));
+        GUIApp.stage.show();
     }
 
     public void add() throws IOException {
@@ -43,8 +40,8 @@ public final class FrontTeam {
 
 
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addMember.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addMember.fxml"))));
+        GUIApp.stage.show();
     }
 
     public void delete() throws IOException {
@@ -53,8 +50,8 @@ public final class FrontTeam {
 
         //TODO : delete user
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("deleteMember.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("deleteMember.fxml"))));
+        GUIApp.stage.show();
     }
 
 

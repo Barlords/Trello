@@ -3,12 +3,11 @@ package front.team;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import front.flag.FrontFlag;
-import front.home.FrontHome;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import front.main.Main;
+import front.main.GUIApp;
 import back.objects.User;
 import front.task.FrontTask;
 import javafx.scene.control.TextField;
@@ -29,14 +28,14 @@ public class Controller {
      */
 
     @FXML
-    private void refreshFrame(ActionEvent event) throws IOException {
+    private void homeTrelloMenu(ActionEvent event) throws IOException {
         event.consume();
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
+        GUIApp.stage.show();
     }
 
     @FXML
-    private void quitTrello(ActionEvent event) {
+    private void quitTrelloMenu(ActionEvent event) {
         event.consume();
         Platform.exit();
     }
@@ -47,17 +46,17 @@ public class Controller {
     #####################
      */
     @FXML
-    private void viewAllMembers(ActionEvent event) throws IOException {
+    private void viewAllMembersMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTeam("viewAll");
     }
     @FXML
-    private void addMember(ActionEvent event) throws IOException {
+    private void addMemberMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTeam("add");
     }
     @FXML
-    private void deleteMember(ActionEvent event) throws IOException {
+    private void deleteMemberMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTeam("delete");
     }
@@ -85,17 +84,17 @@ public class Controller {
     #####################
      */
     @FXML
-    private void viewAllTasks(ActionEvent event) throws IOException {
+    private void viewAllTasksMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTask("viewAll");
     }
     @FXML
-    private void addTask(ActionEvent event) throws IOException {
+    private void addTaskMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTask("add");
     }
     @FXML
-    private void deleteTask(ActionEvent event) throws IOException {
+    private void deleteTaskMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTask("delete");
     }
@@ -126,17 +125,17 @@ public class Controller {
      */
 
     @FXML
-    private void viewAllFlags(ActionEvent event) throws IOException {
+    private void viewAllFlagsMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameFlag("viewAll");
     }
     @FXML
-    private void addFlag(ActionEvent event) throws IOException {
+    private void addFlagMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameFlag("add");
     }
     @FXML
-    private void deleteFlag(ActionEvent event) throws IOException {
+    private void deleteFlagMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameFlag("delete");
     }
@@ -168,9 +167,9 @@ public class Controller {
     public int createUser() throws IOException {
 
         try {
-            TextField tf = (TextField) Main.stage.getScene().lookup("#pseudo");
+            TextField tf = (TextField) GUIApp.stage.getScene().lookup("#pseudo");
 
-            URL url = new URL ("http://localhost:3000/users");
+            URL url = new URL ("http://localhost:3000/users/create");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json");
@@ -202,7 +201,7 @@ public class Controller {
     }
 
     public int getUsers() throws IOException {
-        URL url = new URL ("http://localhost:3000/users");
+        URL url = new URL ("http://localhost:3000/users/getAll");
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
@@ -224,7 +223,7 @@ public class Controller {
     }
 
     public int updateUser() throws IOException {
-        URL url = new URL ("http://localhost:3000/users");
+        URL url = new URL ("http://localhost:3000/users/update");
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("PUT");
         con.setRequestProperty("Content-Type", "application/json");
@@ -256,14 +255,22 @@ public class Controller {
 
     public int deleteUser() throws IOException {
 
-        TextField tf = (TextField) Main.stage.getScene().lookup("#pseudo");
-        String pseudo = tf.getText().replace(" ", "%20");
+        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#pseudo");
 
-        URL url = new URL ("http://localhost:3000/users?pseudo="+pseudo);
+        URL url = new URL ("http://localhost:3000/users/delete");
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("DELETE");
+        con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
+
+        String requestJson = "{\"pseudo\":\""+tf_name.getText()+"\"}";
+        System.out.println(requestJson);
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = requestJson.getBytes();
+            os.write(input, 0, input.length);
+        }
 
         try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder response = new StringBuilder();

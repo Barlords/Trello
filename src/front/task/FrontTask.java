@@ -1,11 +1,9 @@
 package front.task;
 
-import back.objects.Flag;
 import javafx.fxml.FXMLLoader;
-import front.main.Main;
+import front.main.GUIApp;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 public final class FrontTask {
@@ -15,8 +13,8 @@ public final class FrontTask {
     public void start() throws IOException {
         System.out.println("front.task page");
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTask.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTask.fxml"))));
+        GUIApp.stage.show();
     }
 
     public static FrontTask getInstance() {
@@ -32,8 +30,8 @@ public final class FrontTask {
         //TODO : view flags
 
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTask.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTask.fxml"))));
+        GUIApp.stage.show();
     }
 
     public void add() throws IOException {
@@ -41,8 +39,8 @@ public final class FrontTask {
 
         //TODO : add flag
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addTask.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addTask.fxml"))));
+        GUIApp.stage.show();
     }
 
     public void delete() throws IOException {
@@ -51,8 +49,8 @@ public final class FrontTask {
         //TODO : delete flag
 
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("deleteTask.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("deleteTask.fxml"))));
+        GUIApp.stage.show();
     }
 
 }

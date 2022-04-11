@@ -1,17 +1,14 @@
 package front.task;
 
 import back.objects.Task;
-import back.objects.Trello;
-import back.objects.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import front.flag.FrontFlag;
-import front.home.FrontHome;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import front.main.Main;
+import front.main.GUIApp;
 import front.team.FrontTeam;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -35,14 +32,14 @@ public class Controller {
      */
 
     @FXML
-    private void refreshFrame(ActionEvent event) throws IOException {
+    private void homeTrelloMenu(ActionEvent event) throws IOException {
         event.consume();
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
+        GUIApp.stage.show();
     }
 
     @FXML
-    private void quitTrello(ActionEvent event) {
+    private void quitTrelloMenu(ActionEvent event) {
         event.consume();
         Platform.exit();
     }
@@ -53,17 +50,17 @@ public class Controller {
     #####################
      */
     @FXML
-    private void viewAllMembers(ActionEvent event) throws IOException {
+    private void viewAllMembersMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTeam("viewAll");
     }
     @FXML
-    private void addMember(ActionEvent event) throws IOException {
+    private void addMemberMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTeam("add");
     }
     @FXML
-    private void deleteMember(ActionEvent event) throws IOException {
+    private void deleteMemberMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTeam("delete");
     }
@@ -91,17 +88,17 @@ public class Controller {
     #####################
      */
     @FXML
-    private void viewAllTasks(ActionEvent event) throws IOException {
+    private void viewAllTasksMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTask("viewAll");
     }
     @FXML
-    private void addTask(ActionEvent event) throws IOException {
+    private void addTaskMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTask("add");
     }
     @FXML
-    private void deleteTask(ActionEvent event) throws IOException {
+    private void deleteTaskMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTask("delete");
     }
@@ -132,17 +129,17 @@ public class Controller {
      */
 
     @FXML
-    private void viewAllFlags(ActionEvent event) throws IOException {
+    private void viewAllFlagsMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameFlag("viewAll");
     }
     @FXML
-    private void addFlag(ActionEvent event) throws IOException {
+    private void addFlagMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameFlag("add");
     }
     @FXML
-    private void deleteFlag(ActionEvent event) throws IOException {
+    private void deleteFlagMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameFlag("delete");
     }
@@ -169,10 +166,10 @@ public class Controller {
     public int createTask() throws IOException {
 
         try {
-            TextField tf_name = (TextField) Main.stage.getScene().lookup("#name");
-            TextArea ta_description = (TextArea) Main.stage.getScene().lookup("#description");
+            TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
+            TextArea ta_description = (TextArea) GUIApp.stage.getScene().lookup("#description");
 
-            URL url = new URL ("http://localhost:3000/tasks");
+            URL url = new URL ("http://localhost:3000/tasks/create");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json");
@@ -204,7 +201,7 @@ public class Controller {
     }
 
     public int getTasks() throws IOException {
-        URL url = new URL ("http://localhost:3000/tasks");
+        URL url = new URL ("http://localhost:3000/tasks/getAll");
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
@@ -225,7 +222,7 @@ public class Controller {
     }
 
     public int updateTask() throws IOException {
-        URL url = new URL ("http://localhost:3000/tasks");
+        URL url = new URL ("http://localhost:3000/tasks/update");
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("PUT");
         con.setRequestProperty("Content-Type", "application/json");
@@ -255,14 +252,22 @@ public class Controller {
     }
 
     public int deleteTask() throws IOException {
-        TextField tf_name = (TextField) Main.stage.getScene().lookup("#name");
-        String name = tf_name.getText().replace(" ", "%20");
 
-        URL url = new URL ("http://localhost:3000/tasks?name="+name);
+        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
+
+        URL url = new URL ("http://localhost:3000/tasks/delete");
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("DELETE");
+        con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
+
+        String requestJson = "{\"name\":\""+tf_name.getText()+"\"}";
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
 
         try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder response = new StringBuilder();

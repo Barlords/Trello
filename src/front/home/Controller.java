@@ -5,7 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import front.main.Main;
+import front.main.GUIApp;
 import front.task.FrontTask;
 import front.team.FrontTeam;
 
@@ -23,8 +23,8 @@ public class Controller {
     @FXML
     private void refreshFrame(ActionEvent event) throws IOException {
         event.consume();
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
+        GUIApp.stage.show();
     }
 
     @FXML

@@ -70,7 +70,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>src.front.main.Main</mainClass>
+                            <mainClass>src.app.Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>

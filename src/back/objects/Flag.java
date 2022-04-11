@@ -6,11 +6,9 @@ public class Flag {
 
     int id;
     String name;
-    String description;
 
-    public Flag(String name, String description) {
+    public Flag(String name) {
         this.name = name;
-        this.description = description;
     }
 
     public String toJSON() {

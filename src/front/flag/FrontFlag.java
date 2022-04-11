@@ -1,19 +1,9 @@
 package front.flag;
 
-import back.objects.Flag;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import javafx.fxml.FXMLLoader;
-import front.main.Main;
+import front.main.GUIApp;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Objects;
 
 public final class FrontFlag {
@@ -31,8 +21,8 @@ public final class FrontFlag {
 
         //TODO : view flags
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllFlag.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllFlag.fxml"))));
+        GUIApp.stage.show();
     }
 
     public void add() throws IOException {
@@ -40,8 +30,8 @@ public final class FrontFlag {
 
         //TODO : add flag
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addFlag.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addFlag.fxml"))));
+        GUIApp.stage.show();
     }
 
     public void delete() throws IOException {
@@ -49,8 +39,8 @@ public final class FrontFlag {
 
         //TODO : delete flag
 
-        Main.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("deleteFlag.fxml"))));
-        Main.stage.show();
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("deleteFlag.fxml"))));
+        GUIApp.stage.show();
     }
 
 
