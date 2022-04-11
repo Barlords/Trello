@@ -40,6 +40,7 @@ public class CLITask {
     }
 
     private int userDoAction() {
+        System.out.println("Choix : ");
         String choice = CLIApp.getInstance().scan.nextLine();
         switch(choice.toLowerCase()) {
 

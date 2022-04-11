@@ -39,6 +39,7 @@ public class CLIApp {
     }
 
     private int userDoAction() {
+        System.out.println("Choix : ");
         String choice = scan.nextLine();
         switch(choice.toLowerCase()) {
             case "1":
