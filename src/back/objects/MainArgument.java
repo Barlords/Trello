@@ -14,9 +14,10 @@ public class MainArgument {
     public List<String> options;
     public String description;
 
-    public MainArgument(String name, List<String> options) {
+    public MainArgument(String name, List<String> options, String description) {
         this.name = name;
         this.options = options;
+        this.description = description;
     }
 
     public static MainArgument getArg(String name) {
@@ -28,8 +29,15 @@ public class MainArgument {
     }
 
     public static void initArgs() {
-        MainArgument.arguments.add(new MainArgument("--help", new ArrayList<>()));
-        MainArgument.arguments.add(new MainArgument("-interface", new ArrayList<>(Arrays.asList("cli", "gui"))));
+        MainArgument.arguments.add(new MainArgument(
+                "--help",
+                new ArrayList<>(),
+                "Affiche cette aide"));
+        MainArgument.arguments.add(new MainArgument(
+                "-interface",
+                new ArrayList<>(Arrays.asList("cli", "gui")),
+                "Définit l'interface à utiliser\n" +
+                          "                   option = [cli | gui]"));
     }
 
     public static int useArgs() {
@@ -53,7 +61,7 @@ public class MainArgument {
         switch (arg.name) {
             case "--help":
                 useArgHelp();
-                break;
+                return -1;
             case "-interface":
                 useArgInterface();
                 break;
@@ -68,7 +76,7 @@ public class MainArgument {
         Main.indexMainArg++;
         StringBuilder str = new StringBuilder("Option pour l'executable \"Trello.jar\" :\n");
         for(MainArgument arg : arguments) {
-            str.append("    ").append(arg.name).append("    ").append(arg.description);
+            str.append("    ").append(String.format("%-15s", arg.name)).append(arg.description).append("\n");
         }
         str.append("\n");
         System.out.println(str);
