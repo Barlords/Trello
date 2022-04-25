@@ -37,6 +37,10 @@ public class CLITrello {
         switch(choice) {
             case "a":
                 CLIApp.getInstance().actualPage = Page.TRELLO;
+                break;
+            case "q" :
+                CLIApp.getInstance().actualPage = Page.QUIT;
+                break;
         }
     }
 

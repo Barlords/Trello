@@ -1,28 +1,33 @@
 package app;
 
+import back.objects.MainArgument;
 import front.main.CLIApp;
 import front.main.GUIApp;
-import javafx.application.Application;
 
 public class Main {
 
+    public static String ihm = "";
+    public static String[] args;
+    public static int indexMainArg = 0;
+
+
     public static void main(String[] args) throws Exception {
-        if(args.length == 1) {
-            if (args[0].equals("gui")) {
+        Main.args = args;
+        int res = MainArgument.useArgs();
+        if(res == -1) {
+            return;
+        }
+        switch(ihm) {
+            case "cli":
+                CLIApp.getInstance().launch();
+                break;
+            case "gui":
                 GUIApp app = new GUIApp();
                 app.launch();
-            } else if (args[0].equals("cli")) {
-                CLIApp.getInstance().launch();
-            } else {
-                System.out.println("Argument incorrect :\n" +
-                        "   Autorisé : cli, gui\n" +
-                        "   Trouvé : " + args[0]);
-            }
-        }
-        else {
-            System.out.println("Nombre d'argument(s) incorrect :\n" +
-                    "   Attendu 1\n" +
-                    "   Trouvé " + args.length);
+                break;
+            default:
+                System.out.println("Erreur dans main -> switch(ihm) : ihm inconnue");
+                break;
         }
     }
 

@@ -4,6 +4,7 @@ import back.objects.Page;
 import front.trello.CLITrello;
 import front.user.CLIUser;
 
+import java.net.Inet4Address;
 import java.util.Scanner;
 
 public class CLIApp {
@@ -86,18 +87,23 @@ public class CLIApp {
     }
 
     public void actionOfApp(String choice) {
-        if() {
+        try {
+            int value = Integer.parseInt(choice);
             CLIApp.getInstance().actualPage = Page.TRELLO;
-        }
-        else {
-            switch (choice) {
+        } catch (NumberFormatException e) {
+            switch(choice) {
                 case "q":
                     CLIApp.getInstance().actualPage = Page.QUIT;
                     break;
                 default:
                     System.out.println(choice + " n'est pas un choix valide");
-                    return;
             }
+        }
+    }
+
+    public void checkBDDTrello(int id) {
+        if(id == 1) {
+            CLIApp.getInstance().actualPage = Page.TRELLO;
         }
     }
 
