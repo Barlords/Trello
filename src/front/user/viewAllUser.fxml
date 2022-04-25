@@ -3,13 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="front.team.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="front.user.Controller">
    <MenuBar prefHeight="30.0" prefWidth="1000.0">
       <Menu mnemonicParsing="false" text="Trello">
          <MenuItem mnemonicParsing="false" onAction="#homeTrelloMenu" text="Suivi" />
          <MenuItem mnemonicParsing="false" onAction="#quitTrelloMenu" text="Quitter" />
       </Menu>
-      <Menu mnemonicParsing="false" text="Equipe">
+      <Menu mnemonicParsing="false" text="Utilisateur">
          <MenuItem mnemonicParsing="false" onAction="#viewAllMembersMenu" text="Voir les Menbres du projet" />
          <MenuItem mnemonicParsing="false" onAction="#addMemberMenu" text="Ajouter un Membre" />
          <MenuItem mnemonicParsing="false" onAction="#deleteMemberMenu" text="Supprimer un Membre" />

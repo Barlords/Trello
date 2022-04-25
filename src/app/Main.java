@@ -6,7 +6,7 @@ import javafx.application.Application;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         if(args.length == 1) {
             if (args[0].equals("gui")) {
                 GUIApp app = new GUIApp();

@@ -1,7 +1,5 @@
 package back.objects;
 
-import front.home.FrontHome;
-
 import java.util.List;
 
 public class Trello {

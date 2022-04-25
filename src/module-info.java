@@ -7,8 +7,8 @@ module Trello {
     requires com.google.gson;
 
     opens front.main;
-    opens front.home;
-    opens front.team;
+    opens front.trello;
+    opens front.user;
     opens front.task;
     opens front.flag;
 }

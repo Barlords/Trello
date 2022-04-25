@@ -1,24 +1,71 @@
 package front.main;
 
-import front.home.CLIHome;
+import back.objects.Page;
+import front.trello.CLITrello;
+import front.user.CLIUser;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 public class CLIApp {
 
     private static CLIApp instance;
     public Scanner scan;
+    public Page actualPage;
 
-    public CLIApp() {
+    private CLIApp() {
         scan = new Scanner(System.in);
     }
 
-    public void launch() {
-        int res = 0;
-        while(res == 0) {
-            printFrontApp();
-            res = userDoAction();
+    public void launch() throws Exception {
+        actualPage = Page.APP;
+        while(true) {
+            switch(actualPage) {
+                case APP:
+                    printFrontApp();
+                    actionOfApp(scanChoice());
+                    break;
+                case TRELLO:
+                    CLITrello.getInstance().printFrontHome();
+                    CLITrello.getInstance().actionOfTrello(scanChoice());
+                    break;
+                case USER:
+                    CLIUser.getInstance().printFrontUser();
+                    CLIUser.getInstance().actionOfUser(scanChoice());
+                    break;
+                case USER_MENU:
+                    break;
+                case USER_VIEW:
+                    break;
+                case USER_ADD:
+                    break;
+                case USER_DELETE:
+                    break;
+                case TASK:
+                    break;
+                case TASK_MENU:
+                    break;
+                case TASK_VIEW:
+                    break;
+                case TASK_ADD:
+                    break;
+                case TASK_DELETE:
+                    break;
+                case FLAG:
+                    break;
+                case FLAG_MENU:
+                    break;
+                case FLAG_VIEW:
+                    break;
+                case FLAG_ADD:
+                    break;
+                case FLAG_DELETE:
+                    break;
+                case QUIT:
+                    System.out.println("Hey! Il reste du taff ne part pas :P");
+                    return;
+                default:
+                    throw new Exception("CLIApp -> launch -> switch(choice) -> default");
+            }
         }
     }
 
@@ -38,18 +85,25 @@ public class CLIApp {
                         "    \\_/__________________________________________________/");
     }
 
-    private int userDoAction() {
-        System.out.println("Choix : ");
-        String choice = scan.nextLine();
-        switch(choice.toLowerCase()) {
-            case "1":
-                CLIHome.getInstance().launch();
-                return 1;
-            case "q":
-                return -1;
-            default:
-                return 0;
+    public void actionOfApp(String choice) {
+        if() {
+            CLIApp.getInstance().actualPage = Page.TRELLO;
         }
+        else {
+            switch (choice) {
+                case "q":
+                    CLIApp.getInstance().actualPage = Page.QUIT;
+                    break;
+                default:
+                    System.out.println(choice + " n'est pas un choix valide");
+                    return;
+            }
+        }
+    }
+
+    private String scanChoice() {
+        System.out.println("Choix : ");
+        return scan.nextLine().toLowerCase();
     }
 
     public static CLIApp getInstance() {

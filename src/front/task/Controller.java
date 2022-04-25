@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import front.main.GUIApp;
-import front.team.FrontTeam;
+import front.user.FrontUser;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -34,7 +34,7 @@ public class Controller {
     @FXML
     private void homeTrelloMenu(ActionEvent event) throws IOException {
         event.consume();
-        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("trello.fxml"))));
         GUIApp.stage.show();
     }
 
@@ -68,13 +68,13 @@ public class Controller {
     private void goToFrameTeam(String action) throws IOException {
         switch (action) {
             case "viewAll" :
-                FrontTeam.getInstance().viewAll();
+                FrontUser.getInstance().viewAll();
                 break;
             case "add" :
-                FrontTeam.getInstance().add();
+                FrontUser.getInstance().add();
                 break;
             case "delete" :
-                FrontTeam.getInstance().delete();
+                FrontUser.getInstance().delete();
                 break;
             default:
                 System.out.println("ERROR : goToFrameTeam switch action");

@@ -1,6 +1,6 @@
 package front.main;
 
-import front.home.FrontHome;
+import front.trello.FrontTrello;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,7 +30,7 @@ public class GUIApp extends Application {
         GUIApp.stage.setTitle("Trello Projet Annuel");
         GUIApp.stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guiapp.fxml")))));
 
-        FrontHome.getInstance().start();
+        FrontTrello.getInstance().start();
     }
 
 }

@@ -1,28 +1,30 @@
-package front.flag;
+package front.trello;
 
+import back.objects.Page;
 import front.main.CLIApp;
 
-import java.util.Locale;
+public class CLITrello {
 
-public class CLIFlag {
+    private static CLITrello instance;
 
-    private static CLIFlag instance;
-
-    private CLIFlag() {
+    private CLITrello() {
     }
 
 
-    public void printFrontFlag() {
+    public void printFrontHome() {
         System.out.println(
                 "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯\\\n" +
                         " \\_,|  [A] - Trello  |  [Z] - Utilisateur  |  [E] - Tâche  |  [R] - Tag  |  [T] - Aide  |\n" +
                         "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                        "    |    TAG !                                                                          |\n" +
+                        "    |    PROJET ANNUEL !                                                                |\n" +
                         "    |                                                                                   |\n" +
-                        "    |    Que voulez vous faire :                                                        |\n" +
-                        "    |        [1] - Voir les tags                                                        |\n" +
-                        "    |        [2] - Ajouter un tag                                                       |\n" +
-                        "    |        [3] - Supprimer un tag                                                     |\n" +
+                        "    |    Tâche(s) disponible(s) :                                                       |\n" +
+                        "    |        A faire :                                                                  |\n" +
+                        "    |            [1] - Angular, web                                                     |\n" +
+                        "    |        En cours :                                                                 |\n" +
+                        "    |            [2] - Trello CLI                                                       |\n" +
+                        "    |        Terminée :                                                                 |\n" +
+                        "    |            [3] - Trello GUI                                                       |\n" +
                         "    |                                                                                   |\n" +
                         "    |                                                                  [Q] - Quitter    |\n" +
                         "    |                                                                                   |\n" +
@@ -31,32 +33,16 @@ public class CLIFlag {
                         "    \\_/_________________________________________________________________________________/");
     }
 
-    public void actionOfFlag(String choice) {
+    public void actionOfTrello(String choice) {
         switch(choice) {
             case "a":
-                break;
-            case "z":
-                break;
-            case "e":
-                break;
-            case "r":
-                break;
-            case "t":
-                break;
-            case "1":
-                break;
-            case "2":
-                break;
-            case "3":
-                break;
-            case "q":
-                break;
+                CLIApp.getInstance().actualPage = Page.TRELLO;
         }
     }
 
-    public static CLIFlag getInstance() {
+    public static CLITrello getInstance() {
         if (instance == null) {
-            instance = new CLIFlag();
+            instance = new CLITrello();
         }
         return instance;
     }

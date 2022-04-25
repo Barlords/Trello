@@ -1,4 +1,4 @@
-package front.home;
+package front.trello;
 
 import front.flag.FrontFlag;
 import javafx.application.Platform;
@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import front.main.GUIApp;
 import front.task.FrontTask;
-import front.team.FrontTeam;
+import front.user.FrontUser;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -23,7 +23,7 @@ public class Controller {
     @FXML
     private void refreshFrame(ActionEvent event) throws IOException {
         event.consume();
-        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("home.fxml"))));
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("trello.fxml"))));
         GUIApp.stage.show();
     }
 
@@ -57,13 +57,13 @@ public class Controller {
     private void goToFrameTeam(String action) throws IOException {
         switch (action) {
             case "viewAll" :
-                FrontTeam.getInstance().viewAll();
+                FrontUser.getInstance().viewAll();
                 break;
             case "add" :
-                FrontTeam.getInstance().add();
+                FrontUser.getInstance().add();
                 break;
             case "delete" :
-                FrontTeam.getInstance().delete();
+                FrontUser.getInstance().delete();
                 break;
             default:
                 System.out.println("ERROR : goToFrameTask switch action");

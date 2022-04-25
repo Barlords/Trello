@@ -4,13 +4,13 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0"
-            xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="front.home.Controller">
+            xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="front.trello.Controller">
     <MenuBar prefHeight="30.0" prefWidth="1000.0">
         <Menu mnemonicParsing="false" text="Trello">
             <MenuItem mnemonicParsing="false" onAction="#refreshFrame" text="Actualiser" />
             <MenuItem mnemonicParsing="false" onAction="#quitTrello" text="Quitter" />
         </Menu>
-        <Menu mnemonicParsing="false" text="Equipe">
+        <Menu mnemonicParsing="false" text="Utilisateur">
             <MenuItem mnemonicParsing="false" onAction="#viewAllMembers" text="Voir les Menbres du projet" />
             <MenuItem mnemonicParsing="false" onAction="#addMember" text="Ajouter un Membre" />
             <MenuItem mnemonicParsing="false" onAction="#deleteMember" text="Supprimer un Membre" />

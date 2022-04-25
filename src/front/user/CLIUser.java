@@ -1,28 +1,25 @@
-package front.task;
+package front.user;
 
 import front.main.CLIApp;
 
-import java.util.Locale;
+public class CLIUser {
 
-public class CLITask {
+    private static CLIUser instance;
 
-    private static CLITask instance;
-
-    public CLITask() {
-
+    private CLIUser() {
     }
 
-    public void printFrontTask() {
+    public void printFrontUser() {
         System.out.println(
                 "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯\\\n" +
                         " \\_,|  [a] - Trello  |  [z] - Utilisateur  |  [e] - Tâche  |  [r] - Tag  |  [t] - Aide  |\n" +
                         "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                        "    |    TACHE !                                                                        |\n" +
+                        "    |    UTILISATEUR !                                                                       |\n" +
                         "    |                                                                                   |\n" +
                         "    |    Que voulez vous faire :                                                        |\n" +
-                        "    |        [1] - Voir les tâches                                                      |\n" +
-                        "    |        [2] - Ajouter une tâche                                                    |\n" +
-                        "    |        [3] - Supprimer une tâche                                                  |\n" +
+                        "    |        [1] - Voir l'équipe                                                        |\n" +
+                        "    |        [2] - Ajouter un membre à l'équipe                                         |\n" +
+                        "    |        [3] - Supprimer un membre de l'équipe                                      |\n" +
                         "    |                                                                                   |\n" +
                         "    |                                                                  [Q] - Quitter    |\n" +
                         "    |                                                                                   |\n" +
@@ -31,15 +28,15 @@ public class CLITask {
                         "    \\_/_________________________________________________________________________________/");
     }
 
-    private void actionOfTask(String choice) {
+    public void actionOfUser(String choice) {
         switch(choice) {
 
         }
     }
 
-    public static CLITask getInstance() {
+    public static CLIUser getInstance() {
         if (instance == null) {
-            instance = new CLITask();
+            instance = new CLIUser();
         }
         return instance;
     }

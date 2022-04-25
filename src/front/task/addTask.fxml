@@ -10,7 +10,7 @@
          <MenuItem mnemonicParsing="false" onAction="#homeTrelloMenu" text="Suivi" />
          <MenuItem mnemonicParsing="false" onAction="#quitTrelloMenu" text="Quitter" />
       </Menu>
-      <Menu mnemonicParsing="false" text="Equipe">
+      <Menu mnemonicParsing="false" text="Utilisateur">
          <MenuItem mnemonicParsing="false" onAction="#viewAllMembersMenu" text="Voir les Menbres du projet" />
          <MenuItem mnemonicParsing="false" onAction="#addMemberMenu" text="Ajouter un Membre" />
          <MenuItem mnemonicParsing="false" onAction="#deleteMemberMenu" text="Supprimer un Membre" />

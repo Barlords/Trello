@@ -1,4 +1,4 @@
-package front.team;
+package front.user;
 
 import javafx.fxml.FXMLLoader;
 import front.main.GUIApp;
@@ -6,20 +6,20 @@ import front.main.GUIApp;
 import java.io.IOException;
 import java.util.Objects;
 
-public final class FrontTeam {
+public final class FrontUser {
 
-    private static FrontTeam instance = null;
+    private static FrontUser instance = null;
 
     public void start() throws IOException {
         System.out.println("front.team page");
 
-        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTeam.fxml"))));
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllUser.fxml"))));
         GUIApp.stage.show();
     }
 
-    public static FrontTeam getInstance() {
+    public static FrontUser getInstance() {
         if(null == instance) {
-            instance = new FrontTeam();
+            instance = new FrontUser();
         }
         return instance;
     }
@@ -29,7 +29,7 @@ public final class FrontTeam {
 
         //TODO : view users
 
-        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllTeam.fxml"))));
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("viewAllUser.fxml"))));
         GUIApp.stage.show();
     }
 
@@ -40,7 +40,7 @@ public final class FrontTeam {
 
 
 
-        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addMember.fxml"))));
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addUser.fxml"))));
         GUIApp.stage.show();
     }
 
@@ -50,7 +50,7 @@ public final class FrontTeam {
 
         //TODO : delete user
 
-        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("deleteMember.fxml"))));
+        GUIApp.stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("deleteUser.fxml"))));
         GUIApp.stage.show();
     }
 
