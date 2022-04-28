@@ -24,6 +24,8 @@ public enum Page {
     FLAG_ADD,
     FLAG_DELETE,
 
+    HELP,
+
     QUIT
 
 }

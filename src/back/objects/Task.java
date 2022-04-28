@@ -8,13 +8,13 @@ import java.util.List;
 public class Task {
 
     public String name;
-    public String descripion;
+    public String description;
     public List<Flag> flags;
     public List<User> members;
 
     public Task(String name, String description) {
         this.name = name;
-        this.descripion = description;
+        this.description = description;
     }
 
     public int addMember(User member) throws IOException {

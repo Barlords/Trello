@@ -12,8 +12,6 @@ public class User {
         this.pseudo = pseudo;
     }
 
-
-
     public String toJSON() {
         Gson g = new Gson();
         return g.toJson(this);

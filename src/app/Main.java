@@ -1,8 +1,8 @@
 package app;
 
 import back.objects.MainArgument;
-import front.main.CLIApp;
-import front.main.GUIApp;
+import front.cli.CLIApp;
+import front.gui.main.GUIApp;
 
 public class Main {
 

@@ -6,7 +6,7 @@ public class Trello {
 
     private static Trello instance;
 
-    public List<User> members;
+    public List<User> users;
     public List<Task> tasks;
     public List<Flag> flags;
 

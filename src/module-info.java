@@ -6,9 +6,13 @@ module Trello {
     requires javafx.graphics;
     requires com.google.gson;
 
-    opens front.main;
-    opens front.trello;
-    opens front.user;
-    opens front.task;
-    opens front.flag;
+    opens front.gui.main;
+    opens front.gui.trello;
+    opens front.gui.user;
+    opens front.gui.task;
+    opens front.cli;
+
+    opens back.controller;
+
+    opens back.objects;
 }
