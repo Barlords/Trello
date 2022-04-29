@@ -7,33 +7,22 @@ import java.util.List;
 
 public class Task {
 
+    public enum Status {
+        TODO,
+        IN_PROGRESS,
+        END;
+    }
+
     public String name;
     public String description;
+    public Status status;
     public List<Flag> flags;
     public List<User> members;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public int addMember(User member) throws IOException {
-
-        members.add(member);
-        return 1;
-    }
-
-    public int deleteMember(String name) {
-        return 0;
-    }
-
-    public int addFlag(Flag flag) {
-        flags.add(flag);
-        return 1;
-    }
-
-    public int deleteFlag(String name) {
-        return 0;
+        this.status = Status.TODO;
     }
 
     public String toJSON() {

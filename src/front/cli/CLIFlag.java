@@ -1,6 +1,13 @@
 package front.cli;
 
+import back.controller.ControllerFlag;
+import back.controller.ControllerTask;
+import back.objects.Flag;
 import back.objects.Page;
+import back.objects.Task;
+
+import java.io.IOException;
+import java.util.List;
 
 public class CLIFlag {
 
@@ -9,28 +16,40 @@ public class CLIFlag {
     private CLIFlag() {
     }
 
+    private String getListFlagsToPrint() throws IOException {
+        List<Flag> flags = ControllerFlag.getFlags();
+        String str =    "    |    LISTE DES TACHES !                                                                     |\n" +
+                "    |                                                                                           |\n";
 
-    private void printFrontFlag() {
-        System.out.println(
-                "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯\\\n" +
-                        " \\_,|  [A] - Trello  |  [Z] - Utilisateur  |  [E] - Tâche  |  [R] - Tag  |  [T] - Aide  |  [X]  |\n" +
-                        "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                        "    |    MENU TAG !                                                                             |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |    Que voulez vous faire :                                                                |\n" +
-                        "    |        [1] - Voir les tags                                                                |\n" +
-                        "    |        [2] - Ajouter un tag                                                               |\n" +
-                        "    |        [3] - Supprimer un tag                                                             |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |  ,-----------------------------------------------------------------------------------------,\n" +
-                        "    \\_/_________________________________________________________________________________________/"
-        );
+        if(flags.size() == 0) {
+            str += "    |        Aucune tâche dans le projet, enfin du temp libre :D                              |";
+        }
+        else {
+            for(Flag flag : flags) {
+                str += String.format("    |      -  %-78s    |\n", flag.name);
+            }
+        }
+        return str;
     }
 
-    public void actionOfFlag() {
-        printFrontFlag();
+    private void printFrontFlagMenu() throws IOException {
+        String str = CLIUtils.getInstance().getToolBar();
+        str +=  "    |    MENU TAG !                                                                             |\n" +
+                "    |                                                                                           |\n" +
+                "    |    Que voulez vous faire :                                                                |\n" +
+                "    |        [1] - Ajouter un tag                                                               |\n" +
+                "    |        [2] - Supprimer un tag                                                             |\n" +
+                "    |        [3] - Modifier un tag                                                              |\n" +
+                "    |                                                                                           |\n" +
+                "    |                                                                                           |\n";
+        str += getListFlagsToPrint();
+
+        str += CLIUtils.getInstance().getEndPage();
+
+    }
+
+    public void actionOfFlag() throws IOException {
+        printFrontFlagMenu();
         String choice = CLIApp.getInstance().scanChoice();
         switch(choice) {
             case "a":
@@ -52,12 +71,9 @@ public class CLIFlag {
                 CLIApp.getInstance().actualPage = Page.QUIT;
                 break;
             case "1":
-                CLIApp.getInstance().actualPage = Page.FLAG_VIEW;
-                break;
-            case "2":
                 CLIApp.getInstance().actualPage = Page.FLAG_ADD;
                 break;
-            case "3":
+            case "2":
                 CLIApp.getInstance().actualPage = Page.FLAG_DELETE;
                 break;
         }

@@ -16,20 +16,9 @@ public class CLITask {
     private CLITask() {
     }
 
-    private void printFrontTaskMenu() throws IOException {
+    private String getListTasksToPrint() throws IOException {
         List<Task> tasks = ControllerTask.getTasks();
-        String str =
-                "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯\\\n" +
-                        " \\_,|  [A] - Trello  |  [Z] - Utilisateur  |  [E] - Tâche  |  [R] - Tag  |  [T] - Aide  |  [X]  |\n" +
-                        "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                        "    |    MENU TACHE !                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |    Que voulez vous faire :                                                                |\n" +
-                        "    |        [1] - Ajouter une tâche                                                            |\n" +
-                        "    |        [2] - Supprimer une tâche                                                          |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |    LISTE DES TACHES !                                                                     |\n" +
+        String str =    "    |    LISTE DES TACHES !                                                                     |\n" +
                         "    |                                                                                           |\n";
 
         if(tasks.size() == 0) {
@@ -46,45 +35,32 @@ public class CLITask {
                 }
             }
         }
+        return str;
+    }
 
-        str +=
-                "    |                                                                                           |\n" +
+    private void printFrontTaskMenu() throws IOException {
+        String str = CLIUtils.getInstance().getToolBar();
+
+        str +=          "    |    MENU TACHE !                                                                           |\n" +
                         "    |                                                                                           |\n" +
+                        "    |    Que voulez vous faire :                                                                |\n" +
+                        "    |        [1] - Ajouter une tâche                                                            |\n" +
+                        "    |        [2] - Supprimer une tâche                                                          |\n" +
+                        "    |        [3] - Modifier une tâche                                                           |\n" +
                         "    |                                                                                           |\n" +
-                        "    |  ,-----------------------------------------------------------------------------------------,\n" +
-                        "    \\_/_________________________________________________________________________________________/";
+                        "    |                                                                                           |\n";
+
+        str += getListTasksToPrint();
+
+        str += CLIUtils.getInstance().getEndPage();
 
         System.out.println(str);
     }
 
     private void printFrontTaskViewAll() throws IOException {
-        List<Task> tasks = ControllerTask.getTasks();
-        String str =
-                "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯\\\n" +
-                        " \\_,|  [A] - Trello  |  [Z] - Utilisateur  |  [E] - Tâche  |  [R] - Tag  |  [T] - Aide  |  [X]  |\n" +
-                        "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                        "    |    LISTE DES TACHES !                                                                     |\n" +
-                        "    |                                                                                           |\n";
-
-        if(tasks.size() == 0) {
-            str += "    |        Aucune tâche dans le projet, enfin du temp libre :D                              |";
-        }
-        else {
-            for(Task task : tasks) {
-                str += String.format("    |      -  %-78s    |\n", task.name);
-                if(task.description.length() > 74) {
-                    str += String.format("    |             %-71s...    |\n", task.description.substring(0, 71));
-                }
-            }
-        }
-
-        str +=
-                "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |  ,-----------------------------------------------------------------------------------------,\n" +
-                        "    \\_/_________________________________________________________________________________________/";
-
+        String str = CLIUtils.getInstance().getToolBar();
+        str += getListTasksToPrint();
+        str += CLIUtils.getInstance().getEndPage();
         System.out.println(str);
     }
 

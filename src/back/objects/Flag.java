@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 
 public class Flag {
 
-    int id;
-    String name;
+    private int id;
+    public String name;
 
     public Flag(String name) {
         this.name = name;

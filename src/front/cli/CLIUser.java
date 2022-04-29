@@ -15,22 +15,10 @@ public class CLIUser {
     private CLIUser() {
     }
 
-    private void printFrontUserMenu() throws IOException {
+    private String getListUsersToPrint() throws IOException {
         List<User> users = ControllerUser.getUsers();
-        String str =
-                "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯\\\n" +
-                        " \\_,|  [A] - Trello  |  [Z] - Utilisateur  |  [E] - Tâche  |  [R] - Tag  |  [T] - Aide  |  [X]  |\n" +
-                        "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                        "    |    MENU UTILISATEUR !                                                                     |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |    Que voulez vous faire :                                                                |\n" +
-                        "    |        [1] - Ajouter un membre à l'équipe                                                 |\n" +
-                        "    |        [2] - Supprimer un membre de l'équipe                                              |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |    LISTE DES UTILISATEURS !                                                               |\n" +
+        String str =    "    |    LISTE DES UTILISATEURS !                                                               |\n" +
                         "    |                                                                                           |\n";
-
         if(users.size() == 0) {
             str += "    |        Aucun utilisateur dans le projet, je suis tout seul :(                             |\n";
         }
@@ -39,39 +27,29 @@ public class CLIUser {
                 str += String.format("    |      -  %-82s", user.pseudo) + "|\n";
             }
         }
+        return str;
+    }
 
-        str +=
-                "    |                                                                                           |\n" +
+    private void printFrontUserMenu() throws IOException {
+
+        String str = CLIUtils.getInstance().getToolBar() +
+                        "    |    MENU UTILISATEUR !                                                                     |\n" +
                         "    |                                                                                           |\n" +
+                        "    |    Que voulez vous faire :                                                                |\n" +
+                        "    |        [1] - Ajouter un utilisateur                                                       |\n" +
+                        "    |        [2] - Supprimer un utilisateur                                                     |\n" +
+                        "    |        [3] - Modifier un utilisateur                                                      |\n" +
                         "    |                                                                                           |\n" +
-                        "    |  ,-----------------------------------------------------------------------------------------,\n" +
-                        "    \\_/_________________________________________________________________________________________/";
+                        "    |                                                                                           |\n";
+        str += getListUsersToPrint();
+        str += CLIUtils.getInstance().getEndPage();
         System.out.println(str);
     }
 
     private void printFrontUserViewAll() throws IOException {
-        List<User> users = ControllerUser.getUsers();
-        String str =
-                "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯\\\n" +
-                        " \\_,|  [A] - Trello  |  [Z] - Utilisateur  |  [E] - Tâche  |  [R] - Tag  |  [T] - Aide  |  [X]  |\n" +
-                        "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                        "    |    LISTE DES UTILISATEURS !                                                               |\n" +
-                        "    |                                                                                           |\n";
-
-        if(users.size() == 0) {
-            str += "    |        Aucun utilisateur dans le projet, venez jouer avec moi :'(                         |\n";
-        }
-        else {
-            for(User user : users) {
-                str += String.format("    |      -  %-82s", user.pseudo) + "|\n";
-            }
-        }
-        str +=
-                "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |  ,-----------------------------------------------------------------------------------------,\n" +
-                        "    \\_/_________________________________________________________________________________________/";
+        String str = CLIUtils.getInstance().getToolBar();
+        str += getListUsersToPrint();
+        str += CLIUtils.getInstance().getEndPage();
         System.out.println(str);
     }
 

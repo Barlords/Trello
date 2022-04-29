@@ -15,6 +15,7 @@ import front.gui.main.GUIApp;
 import front.gui.user.GUIUser;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import middleware.requests.APIRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -167,124 +168,11 @@ public class ControllerTask {
 
     }
 
-
-    public static int createTask(Task task) throws IOException {
-
-        try {
-            URL url = new URL (References.URL_API + "/tasks/create");
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json");
-            con.setRequestProperty("Accept", "application/json");
-            con.setDoOutput(true);
-
-            String requestJson = task.toJSON();
-
-            try(OutputStream os = con.getOutputStream()) {
-                byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                System.out.println(con.getResponseCode());
-                System.out.println(con.getResponseMessage());
-                StringBuilder response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                System.out.println(response);
-            }
-            return 1;
-        }
-        catch(Exception e) {
-            System.out.println("error : " + e);
-            return 0;
-        }
-
-    }
-
-    public static List<Task> getTasks() throws IOException {
-        URL url = new URL (References.URL_API + "/tasks/getAll");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-
-            System.out.println(response);
-
-            Task[] tasks = new Gson().fromJson(response.toString(), Task[].class);
-            return Arrays.asList(tasks);
-        }
-    }
-
-    public static int updateTask() throws IOException {
-        URL url = new URL (References.URL_API + "/tasks/update");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("PUT");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-        //TODO : update
-        Task t =  new Task("tres urgent", "encore plus qu'avant");
-
-        String requestJson = t.toJSON();
-
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
-        }
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response);
-        }
-
-        return 1;
-    }
-
-    public static int deleteTask(String name) throws IOException {
-
-        URL url = new URL (References.URL_API + "/tasks/delete");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("DELETE");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-        String requestJson = "{\"name\":\"" + name + "\"}";
-
-        System.out.println(requestJson);
-
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
-        }
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response);
-        }
-
-        return 1;
-    }
-
+    /*
+    #####################
+    #   Buttons         #
+    #####################
+     */
     @FXML
     public List<Task> getTasksFxml() throws IOException {
         return getTasks();
@@ -292,7 +180,7 @@ public class ControllerTask {
 
     @FXML
     public int deleteTaskFxml() throws IOException {
-        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#pseudo");
+        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
         return deleteTask(tf_name.getText());
     }
 
@@ -303,12 +191,83 @@ public class ControllerTask {
         return createTask(new Task(tf_name.getText(), tf_description.getText()));
     }
 
+
+    public static int createTask(Task task) throws IOException {
+
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/tasks/create"));
+
+        APIRequest.writeBodyRequest(con, task.toJSON());
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int deleteTask(String name) throws IOException {
+
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/tasks/delete"));
+
+        APIRequest.writeBodyRequest(con, "{\"name\":\"" + name + "\"}");
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int updateTask() throws IOException {
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/tasks/update"));
+
+        // TEST
+        Task t =  new Task("tres urgent", "encore plus qu'avant");
+        //
+
+        APIRequest.writeBodyRequest(con, t.toJSON());
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static List<Task> getTasks() throws IOException {
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/tasks/getAll"));
+
+        String response = APIRequest.getResponse(con);
+
+        Task[] tasks = new Gson().fromJson(response.toString(), Task[].class);
+
+        return Arrays.asList(tasks);
+    }
+
+    public static Task getTasksByName(String name) throws IOException {
+
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/tasks/getByName?name=" + name));
+
+        String response = APIRequest.getResponse(con);
+
+        Task task = new Gson().fromJson(response, Task.class);
+
+        return task;
+    }
+
+    public static List<Task> getTasksByStatus(Task.Status status) throws IOException {
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/tasks/getByStatus?status=" + status.name()));
+
+        String response = APIRequest.getResponse(con);
+
+        Task[] tasks = new Gson().fromJson(response.toString(), Task[].class);
+
+        return Arrays.asList(tasks);
+    }
+
+
+
     public int addUserToTask(String userName) {
-
-
-
-
-
         return 1;
     }
 

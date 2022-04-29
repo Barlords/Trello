@@ -12,6 +12,7 @@ import front.gui.main.GUIApp;
 import back.objects.User;
 import front.gui.task.GuiTask;
 import javafx.scene.control.TextField;
+import middleware.requests.APIRequest;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -166,150 +167,6 @@ public class ControllerUser {
     #   Buttons         #
     #####################
      */
-    public static int createUser(User user) throws IOException {
-
-        try {
-            URL url = new URL (References.URL_API + "/users/create");
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json");
-            con.setRequestProperty("Accept", "application/json");
-            con.setDoOutput(true);
-
-            String requestJson = user.toJSON();
-
-            try(OutputStream os = con.getOutputStream()) {
-                byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                System.out.println(con.getResponseCode());
-                System.out.println(con.getResponseMessage());
-                StringBuilder response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                System.out.println(response);
-            }
-            return 1;
-        }
-        catch(Exception e) {
-            System.out.println("error : " + e);
-            return 0;
-        }
-
-    }
-
-    public static List<User> getUsers() throws IOException {
-        URL url = new URL (References.URL_API + "/users/getAll");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-
-            //System.out.println(response);
-
-            User[] users = new Gson().fromJson(response.toString(), User[].class);
-            return Arrays.asList(users);
-
-        }
-    }
-
-    public static User getUsersByPseudo(String pseudo) throws IOException {
-        URL url = new URL (References.URL_API + "/users/getByPseudo?pseudo=" + pseudo);
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response);
-
-            if(response.toString().startsWith("404")) {
-                return null;
-            }
-
-            User user = new Gson().fromJson(response.toString(), User.class);
-            return user;
-        }
-    }
-
-    public static int updateUser() throws IOException {
-
-        URL url = new URL (References.URL_API + "/users/update");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("PUT");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        User u =  new User("the best");
-
-        u.id = 16;
-        u.oldPseudo = u.pseudo;
-        u.pseudo = "the old best";
-        String requestJson = u.toJSON();
-
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
-        }
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response);
-        }
-
-        return 1;
-    }
-
-    public static int deleteUser(String pseudo) throws IOException {
-
-        URL url = new URL (References.URL_API + "/users/delete");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("DELETE");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-        String requestJson = "{\"pseudo\":\"" + pseudo + "\"}";
-
-        System.out.println(requestJson);
-
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = requestJson.getBytes();
-            os.write(input, 0, input.length);
-        }
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response);
-        }
-
-        return 1;
-    }
-
     @FXML
     public List<User> getUsersFxml() throws IOException {
         return getUsers();
@@ -326,6 +183,77 @@ public class ControllerUser {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#pseudo");
         return createUser(new User(tf_name.getText()));
     }
+
+
+    // REQUEST
+    public static int createUser(User user) throws IOException {
+
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/users/create"));
+
+        APIRequest.writeBodyRequest(con, user.toJSON());
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int deleteUser(String pseudo) throws IOException {
+
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/users/delete"));
+
+        APIRequest.writeBodyRequest(con, "{\"pseudo\":\"" + pseudo + "\"}");
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int updateUser(String pseudo) throws IOException {
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/users/update"));
+
+        // TEST
+        User u =  new User("the best");
+        u.id = 16;
+        u.oldPseudo = u.pseudo;
+        u.pseudo = "the old best";
+        //
+
+        APIRequest.writeBodyRequest(con, u.toJSON());
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static List<User> getUsers() throws IOException {
+
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/users/getAll"));
+
+        String response = APIRequest.getResponse(con);
+
+        User[] users = new Gson().fromJson(response, User[].class);
+
+        return Arrays.asList(users);
+    }
+
+    public static User getUsersByPseudo(String pseudo) throws IOException {
+
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/users/getByPseudo?pseudo=" + pseudo));
+
+        String response = APIRequest.getResponse(con);
+
+        User user = new Gson().fromJson(response, User.class);
+
+        return user;
+    }
+
+
 
 
 }

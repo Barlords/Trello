@@ -1,6 +1,13 @@
 package front.cli;
 
+import back.controller.ControllerTask;
+import back.controller.ControllerUser;
 import back.objects.Page;
+import back.objects.Task;
+import back.objects.User;
+
+import java.io.IOException;
+import java.util.List;
 
 public class CLITrello {
 
@@ -9,39 +16,41 @@ public class CLITrello {
     private CLITrello() {
     }
 
+    private String getListTasksBySatusToPrint(Task.Status status) throws IOException {
+        List<Task> tasks = ControllerTask.getTasksByStatus(status);
+        String str = "";
+        if(tasks.size() == 0) {
+            str += "    |            Aucune tâche                                                                   |\n";
+        }
+        else {
+            for(Task task : tasks) {
+                str += String.format("    |          -  %-78s", task.name) + "|\n";
+            }
+        }
+        return str;
+    }
 
-    private void printFrontTrello() {
+    private void printFrontTrello() throws IOException {
 
-        String str =
-                "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯\\\n" +
-                " \\_,|  [A] - Trello  |  [Z] - Utilisateur  |  [E] - Tâche  |  [R] - Tag  |  [T] - Aide  |  [X]  |\n" +
-                "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                "    |    PROJET ANNUEL !                                                                        |\n" +
+        String str = CLIUtils.getInstance().getToolBar();
+
+        str +=  "    |    PROJET ANNUEL !                                                                        |\n" +
                 "    |                                                                                           |\n" +
                 "    |    Tâche(s) disponible(s) :                                                               |\n";
 
+        str +=  "    |        A faire :                                                                          |\n" +
+                getListTasksBySatusToPrint(Task.Status.TODO);
+        str +=  "    |        En cours :                                                                         |\n" +
+                getListTasksBySatusToPrint(Task.Status.IN_PROGRESS);
+        str +=  "    |        Terminée :                                                                         |\n" +
+                getListTasksBySatusToPrint(Task.Status.END);
 
-        System.out.print(
-                "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯¯¯¯¯¯¯¯¯T¯¯¯¯¯¯\\\n" +
-                        " \\_,|  [A] - Trello  |  [Z] - Utilisateur  |  [E] - Tâche  |  [R] - Tag  |  [T] - Aide  |  [X]  |\n" +
-                        "    |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|\n" +
-                        "    |    PROJET ANNUEL !                                                                        |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |    Tâche(s) disponible(s) :                                                               |\n" +
-                        "    |        A faire :                                                                          |\n" +
-                        "    |            [1] - Angular, web                                                             |\n" +
-                        "    |        En cours :                                                                         |\n" +
-                        "    |            [2] - Trello CLI                                                               |\n" +
-                        "    |        Terminée :                                                                         |\n" +
-                        "    |            [3] - Trello GUI                                                               |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |  ,-----------------------------------------------------------------------------------------,\n" +
-                        "    \\_/_________________________________________________________________________________________/");
+        str += CLIUtils.getInstance().getEndPage();
+
+        System.out.println(str);
     }
 
-    public void actionOfTrello() {
+    public void actionOfTrello() throws IOException {
         printFrontTrello();
         String choice = CLIApp.getInstance().scanChoice();
         switch(choice) {

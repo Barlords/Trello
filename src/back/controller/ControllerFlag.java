@@ -1,6 +1,8 @@
 package back.controller;
 
+import app.References;
 import back.objects.Flag;
+import back.objects.Task;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import front.gui.flag.GUIFlag;
@@ -13,6 +15,7 @@ import front.gui.task.GuiTask;
 import front.gui.user.GUIUser;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import middleware.requests.APIRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +24,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -163,92 +167,92 @@ public class ControllerFlag {
 
     }
 
-    public List<Flag> getFlags() throws IOException {
-        List<Flag> flags;
-        URL url = new URL ("http://api-pa.erzalauren.fr/java/flags/getAll");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-
-            flags = new Gson().fromJson(response.toString(), new TypeToken<List<Flag>>() {}.getType());
-        }
-        return flags;
+    /*
+    #####################
+    #   Buttons         #
+    #####################
+     */
+    @FXML
+    public List<Flag> getFlagsFxml() throws IOException {
+        return getFlags();
     }
 
-    public int createFlag() {
-
-        try {
-            TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
-            TextArea ta_description = (TextArea) GUIApp.stage.getScene().lookup("#description");
-
-            URL url = new URL ("http://api-pa.erzalauren.fr/java/flags/create");
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json");
-            con.setRequestProperty("Accept", "application/json");
-            con.setDoOutput(true);
-
-            String requestJson = new Flag(tf_name.getText()).toJSON();
-
-            try(OutputStream os = con.getOutputStream()) {
-                byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                System.out.println(response);
-            }
-            return 1;
-        }
-        catch(Exception e) {
-            System.out.println("error : " + e);
-            return 0;
-        }
-
-    }
-
-    public int deleteFlag() throws IOException {
-
+    @FXML
+    public int deleteFlagFxml() throws IOException {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
+        return deleteFlag(tf_name.getText());
+    }
 
-        URL url = new URL ("http://api-pa.erzalauren.fr/java/flags/delete");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("DELETE");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
+    @FXML
+    public int createTaskFxml() throws  IOException {
+        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
+        return createFlag(new Flag(tf_name.getText()));
+    }
 
-        String requestJson = "{\"name\":\""+tf_name.getText()+"\"}";
 
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = requestJson.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
-        }
 
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response);
-        }
+    public static int createFlag(Flag flag) throws IOException {
 
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/flags/create"));
+
+        APIRequest.writeBodyRequest(con, flag.toJSON());
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
 
         return 1;
     }
+
+    public static int deleteFlag(String name) throws IOException {
+
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/flags/delete"));
+
+        APIRequest.writeBodyRequest(con, "{\"name\":\"" + name + "\"}");
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int updateTask() throws IOException {
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/flags/update"));
+
+        // TEST
+        Flag f =  new Flag("flag mit a jour");
+        //
+
+        APIRequest.writeBodyRequest(con, f.toJSON());
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static List<Flag> getFlags() throws IOException {
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/flags/getAll"));
+
+        String response = APIRequest.getResponse(con);
+
+        Flag[] flags = new Gson().fromJson(response.toString(), Flag[].class);
+
+        return Arrays.asList(flags);
+    }
+
+    public static Flag getTasksByName(String name) throws IOException {
+
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/flags/getByName?name=" + name));
+
+        String response = APIRequest.getResponse(con);
+
+        Flag flag = new Gson().fromJson(response, Flag.class);
+
+        return flag;
+    }
+
 
 }
