@@ -6,10 +6,14 @@ public class User {
 
     public int id;
     public String pseudo;
-    public String oldPseudo;
 
     public User(String pseudo) {
         this.pseudo = pseudo;
+    }
+
+    public User(User user) {
+        this.id = user.id;
+        this.pseudo = user.pseudo;
     }
 
     public String toJSON() {

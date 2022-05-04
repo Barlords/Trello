@@ -4,6 +4,7 @@ import back.controller.ControllerTask;
 import back.controller.ControllerUser;
 import back.objects.Page;
 import back.objects.Task;
+import back.objects.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,19 @@ public class CLITask {
     private static CLITask instance;
 
     private CLITask() {
+    }
+
+    private void printFrontTask(Task task) throws IOException {
+        String str =
+                CLIUtils.getInstance().getToolBar() +
+                "    |    TACHE !                                                                                |\n" +
+                "    |                                                                                           |\n" +
+                String.format("    |        Nom : %70s    |", task.name) +
+                String.format("    |        Description : %62s    |", task.description) +
+                "    |                                                                                           |\n" +
+                "    |                                                                                           |\n" +
+                CLIUtils.getInstance().getEndPage();
+        System.out.println(str);
     }
 
     private String getListTasksToPrint() throws IOException {
@@ -84,9 +98,38 @@ public class CLITask {
         System.out.println("SUPPRESSION D'UNE TACHE !");
         System.out.print("Nom de la tâche à supprimer : ");
         String choice = new Scanner(System.in).nextLine();
-        ControllerUser.deleteUser(choice);
+        ControllerTask.deleteTask(choice);
         CLIApp.getInstance().actualPage = Page.TASK_MENU;
     }
+
+    public void updateTask() throws IOException {
+        printFrontTaskViewAll();
+
+        Scanner scan = new Scanner(System.in);
+        System.out.println("MODIFICATION D'UNE TACHE !");
+        System.out.print("Nom de la tâche à modifier : ");
+        String choice = scan.nextLine();
+        Task task = ControllerTask.getTaskByName(choice);
+        if(task == null) {
+            System.out.println("error : l'utilisateur n'existe pas");
+            return;
+        }
+
+        Task taskUp = new Task(task);
+        System.out.println("MODIFICATION \n{");
+        System.out.print("    Nom : ");
+        choice = scan.nextLine();
+        if(choice.equals("")) {
+            System.out.println("erreur : champ vide");
+            CLIApp.getInstance().actualPage = Page.TASK_MENU;
+            return;
+        }
+        taskUp.name = choice;
+
+        ControllerTask.updateTask(task.name, taskUp);
+        CLIApp.getInstance().actualPage = Page.TASK_MENU;
+    }
+
 
     public void menuTask() throws IOException {
         printFrontTaskMenu();
@@ -115,6 +158,9 @@ public class CLITask {
                 break;
             case "2":
                 CLIApp.getInstance().actualPage = Page.TASK_DELETE;
+                break;
+            case "3":
+                CLIApp.getInstance().actualPage = Page.TASK_UPDATE;
                 break;
         }
     }

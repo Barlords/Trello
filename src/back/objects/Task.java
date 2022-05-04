@@ -13,6 +13,7 @@ public class Task {
         END;
     }
 
+    public int id;
     public String name;
     public String description;
     public Status status;
@@ -23,6 +24,14 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = Status.TODO;
+    }
+
+    public Task(Task task) {
+        this.name = task.name;
+        this.description = task.description;
+        this.status = task.status;
+        this.flags = task.flags;
+        this.members = task.members;
     }
 
     public String toJSON() {

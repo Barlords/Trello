@@ -30,6 +30,18 @@ public class CLIUser {
         return str;
     }
 
+    private void printFrontUser(User user) throws IOException {
+        String str =
+                CLIUtils.getInstance().getToolBar() +
+                "    |    UTILISATEUR !                                                                          |\n" +
+                "    |                                                                                           |\n" +
+                String.format("    |        Pseudo : %70s    |", user.pseudo) +
+                "    |                                                                                           |\n" +
+                "    |                                                                                           |\n" +
+                CLIUtils.getInstance().getEndPage();
+        System.out.println(str);
+    }
+
     private void printFrontUserMenu() throws IOException {
 
         String str = CLIUtils.getInstance().getToolBar() +
@@ -54,13 +66,11 @@ public class CLIUser {
     }
 
     public void addUser() throws IOException {
-        Scanner scan = new Scanner(System.in);
-
         printFrontUserViewAll();
 
         System.out.println("CREATION D'UN UTILISATEUR !");
         System.out.print("Nom de l'utilisateur : ");
-        String choice = scan.nextLine();
+        String choice = new Scanner(System.in).nextLine();
 
         ControllerUser.createUser(new User(choice));
         CLIApp.getInstance().actualPage = Page.USER_MENU;
@@ -68,39 +78,43 @@ public class CLIUser {
 
     public void deleteUser() throws IOException {
         printFrontUserViewAll();
+
         System.out.println("SUPPRESSION D'UN UTILISATEUR !");
         System.out.print("Nom de l'utilisateur à supprimer : ");
         String choice = new Scanner(System.in).nextLine();
+
         ControllerUser.deleteUser(choice);
         CLIApp.getInstance().actualPage = Page.USER_MENU;
     }
 
-    /*
-    public void actionOfUserViewAll() throws IOException {
+    public void updateUser() throws IOException {
         printFrontUserViewAll();
-        String choice = CLIApp.getInstance().scanChoice();
-        switch(choice) {
-            case "a":
-                CLIApp.getInstance().actualPage = Page.TRELLO;
-                break;
-            case "z":
-                CLIApp.getInstance().actualPage = Page.USER_MENU;
-                break;
-            case "e":
-                CLIApp.getInstance().actualPage = Page.TASK_MENU;
-                break;
-            case "r":
-                CLIApp.getInstance().actualPage = Page.FLAG_MENU;
-                break;
-            case "t":
-                CLIApp.getInstance().actualPage = Page.HELP;
-                break;
-            case "x":
-                CLIApp.getInstance().actualPage = Page.QUIT;
-                break;
+
+        Scanner scan = new Scanner(System.in);
+        System.out.println("MODIFICATION D'UN UTILISATEUR !");
+        System.out.print("Nom de l'utilisateur à modifier : ");
+        String choice = scan.nextLine();
+        User user = ControllerUser.getUserByPseudo(choice);
+        if(user == null) {
+            System.out.println("erreur : l'utilisateur n'existe pas");
+            CLIApp.getInstance().actualPage = Page.USER_MENU;
+            return;
         }
+
+        User userUp = new User(user);
+        System.out.println("MODIFICATION \n{");
+        System.out.print("    Pseudo : ");
+        choice = scan.nextLine();
+        if(choice.equals("")) {
+            System.out.println("erreur : champ vide");
+            CLIApp.getInstance().actualPage = Page.USER_MENU;
+            return;
+        }
+        userUp.pseudo = choice;
+
+        ControllerUser.updateUser(user.pseudo, userUp);
+        CLIApp.getInstance().actualPage = Page.USER_MENU;
     }
-*/
 
     public void menuUser() throws IOException {
         printFrontUserMenu();
@@ -129,6 +143,9 @@ public class CLIUser {
                 break;
             case "2":
                 CLIApp.getInstance().actualPage = Page.USER_DELETE;
+                break;
+            case "3":
+                CLIApp.getInstance().actualPage = Page.USER_UPDATE;
                 break;
         }
     }

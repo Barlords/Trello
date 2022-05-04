@@ -35,6 +35,9 @@ public class CLIApp {
                 case USER_DELETE:
                     CLIUser.getInstance().deleteUser();
                     break;
+                case USER_UPDATE:
+                    CLIUser.getInstance().updateUser();
+                    break;
                 case TASK:
                     break;
                 case TASK_MENU:
@@ -46,14 +49,22 @@ public class CLIApp {
                 case TASK_DELETE:
                     CLITask.getInstance().deleteTask();
                     break;
+                case TASK_UPDATE:
+                    CLITask.getInstance().updateTask();
+                    break;
                 case FLAG:
                     break;
                 case FLAG_MENU:
-                    CLIFlag.getInstance().actionOfFlag();
+                    CLIFlag.getInstance().menuFlag();
                     break;
                 case FLAG_ADD:
+                    CLIFlag.getInstance().addFlag();
                     break;
                 case FLAG_DELETE:
+                    CLIFlag.getInstance().deleteFlag();
+                    break;
+                case FLAG_UPDATE:
+                    CLIFlag.getInstance().updateFlag();
                     break;
                 case HELP:
                     break;

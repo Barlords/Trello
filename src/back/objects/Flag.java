@@ -11,6 +11,11 @@ public class Flag {
         this.name = name;
     }
 
+    public Flag(Flag flag) {
+        this.id = flag.id;
+        this.name = flag.name;
+    }
+
     public String toJSON() {
         Gson g = new Gson();
         return g.toJson(this);

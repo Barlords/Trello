@@ -217,14 +217,10 @@ public class ControllerFlag {
         return 1;
     }
 
-    public static int updateTask() throws IOException {
-        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/flags/update"));
+    public static int updateFlag(String name, Flag flag) throws IOException {
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/flags/update?name=" + name));
 
-        // TEST
-        Flag f =  new Flag("flag mit a jour");
-        //
-
-        APIRequest.writeBodyRequest(con, f.toJSON());
+        APIRequest.writeBodyRequest(con, flag.toJSON());
 
         String response = APIRequest.getResponse(con);
 
@@ -243,7 +239,7 @@ public class ControllerFlag {
         return Arrays.asList(flags);
     }
 
-    public static Flag getTasksByName(String name) throws IOException {
+    public static Flag getFlagByName(String name) throws IOException {
 
         HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/flags/getByName?name=" + name));
 

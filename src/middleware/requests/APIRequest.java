@@ -1,9 +1,6 @@
 package middleware.requests;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -21,15 +18,18 @@ public class APIRequest {
 
     public static String getResponse(HttpURLConnection con) throws IOException {
 
+        System.out.println("Status : " + con.getResponseCode());
+        System.out.println("Result : " + con.getResponseMessage());
         try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            System.out.println("Status : " + con.getResponseCode());
-            System.out.println("Result : " + con.getResponseMessage());
             StringBuilder response = new StringBuilder();
             String responseLine = null;
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
             return response.toString();
+        }
+        catch(FileNotFoundException e) {
+            return "";
         }
 
     }

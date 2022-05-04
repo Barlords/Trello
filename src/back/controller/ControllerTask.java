@@ -218,14 +218,10 @@ public class ControllerTask {
         return 1;
     }
 
-    public static int updateTask() throws IOException {
-        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/tasks/update"));
+    public static int updateTask(String name, Task task) throws IOException {
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/tasks/update?name=" + name));
 
-        // TEST
-        Task t =  new Task("tres urgent", "encore plus qu'avant");
-        //
-
-        APIRequest.writeBodyRequest(con, t.toJSON());
+        APIRequest.writeBodyRequest(con, task.toJSON());
 
         String response = APIRequest.getResponse(con);
 
@@ -244,7 +240,7 @@ public class ControllerTask {
         return Arrays.asList(tasks);
     }
 
-    public static Task getTasksByName(String name) throws IOException {
+    public static Task getTaskByName(String name) throws IOException {
 
         HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/tasks/getByName?name=" + name));
 

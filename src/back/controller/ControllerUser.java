@@ -212,17 +212,10 @@ public class ControllerUser {
         return 1;
     }
 
-    public static int updateUser(String pseudo) throws IOException {
-        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/users/update"));
+    public static int updateUser(String pseudo, User userUp) throws IOException {
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/users/update?pseudo=" + pseudo));
 
-        // TEST
-        User u =  new User("the best");
-        u.id = 16;
-        u.oldPseudo = u.pseudo;
-        u.pseudo = "the old best";
-        //
-
-        APIRequest.writeBodyRequest(con, u.toJSON());
+        APIRequest.writeBodyRequest(con, userUp.toJSON());
 
         String response = APIRequest.getResponse(con);
 
@@ -242,11 +235,13 @@ public class ControllerUser {
         return Arrays.asList(users);
     }
 
-    public static User getUsersByPseudo(String pseudo) throws IOException {
+    public static User getUserByPseudo(String pseudo) throws IOException {
 
         HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/users/getByPseudo?pseudo=" + pseudo));
 
         String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
 
         User user = new Gson().fromJson(response, User.class);
 
