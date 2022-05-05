@@ -52,6 +52,12 @@ public class CLIApp {
                 case TASK_UPDATE:
                     CLITask.getInstance().updateTask();
                     break;
+                case TASK_USERS:
+                    CLITask.getInstance().usersOnTask();
+                    break;
+                case TASK_FLAGS:
+                    CLITask.getInstance().flagsOnTask();
+                    break;
                 case FLAG:
                     break;
                 case FLAG_MENU:

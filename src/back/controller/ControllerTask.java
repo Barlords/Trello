@@ -1,6 +1,7 @@
 package back.controller;
 
 import app.References;
+import back.objects.Flag;
 import back.objects.Task;
 import back.objects.User;
 import com.google.gson.Gson;
@@ -23,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -60,11 +62,13 @@ public class ControllerTask {
         event.consume();
         goToFrameTeam("viewAll");
     }
+
     @FXML
     private void addMemberMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTeam("add");
     }
+
     @FXML
     private void deleteMemberMenu(ActionEvent event) throws IOException {
         event.consume();
@@ -73,13 +77,13 @@ public class ControllerTask {
 
     private void goToFrameTeam(String action) throws IOException {
         switch (action) {
-            case "viewAll" :
+            case "viewAll":
                 GUIUser.getInstance().viewAll();
                 break;
-            case "add" :
+            case "add":
                 GUIUser.getInstance().add();
                 break;
-            case "delete" :
+            case "delete":
                 GUIUser.getInstance().delete();
                 break;
             default:
@@ -98,11 +102,13 @@ public class ControllerTask {
         event.consume();
         goToFrameTask("viewAll");
     }
+
     @FXML
     private void addTaskMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameTask("add");
     }
+
     @FXML
     private void deleteTaskMenu(ActionEvent event) throws IOException {
         event.consume();
@@ -112,13 +118,13 @@ public class ControllerTask {
 
     private void goToFrameTask(String action) throws IOException {
         switch (action) {
-            case "viewAll" :
+            case "viewAll":
                 GuiTask.getInstance().viewAll();
                 break;
-            case "add" :
+            case "add":
                 GuiTask.getInstance().add();
                 break;
-            case "delete" :
+            case "delete":
                 GuiTask.getInstance().delete();
                 break;
             default:
@@ -139,11 +145,13 @@ public class ControllerTask {
         event.consume();
         goToFrameFlag("viewAll");
     }
+
     @FXML
     private void addFlagMenu(ActionEvent event) throws IOException {
         event.consume();
         goToFrameFlag("add");
     }
+
     @FXML
     private void deleteFlagMenu(ActionEvent event) throws IOException {
         event.consume();
@@ -152,13 +160,13 @@ public class ControllerTask {
 
     private void goToFrameFlag(String action) throws IOException {
         switch (action) {
-            case "viewAll" :
+            case "viewAll":
                 GUIFlag.getInstance().viewAll();
                 break;
-            case "add" :
+            case "add":
                 GUIFlag.getInstance().add();
                 break;
-            case "delete" :
+            case "delete":
                 GUIFlag.getInstance().delete();
                 break;
             default:
@@ -185,7 +193,7 @@ public class ControllerTask {
     }
 
     @FXML
-    public int createTaskFxml() throws  IOException {
+    public int createTaskFxml() throws IOException {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
         TextField tf_description = (TextField) GUIApp.stage.getScene().lookup("#description");
         return createTask(new Task(tf_name.getText(), tf_description.getText()));
@@ -194,7 +202,7 @@ public class ControllerTask {
 
     public static int createTask(Task task) throws IOException {
 
-        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/tasks/create"));
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL(References.URL_API + "/tasks/create"));
 
         APIRequest.writeBodyRequest(con, task.toJSON());
 
@@ -207,7 +215,7 @@ public class ControllerTask {
 
     public static int deleteTask(String name) throws IOException {
 
-        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/tasks/delete"));
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL(References.URL_API + "/tasks/delete"));
 
         APIRequest.writeBodyRequest(con, "{\"name\":\"" + name + "\"}");
 
@@ -219,7 +227,7 @@ public class ControllerTask {
     }
 
     public static int updateTask(String name, Task task) throws IOException {
-        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/tasks/update?name=" + name));
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL(References.URL_API + "/tasks/update?name=" + name));
 
         APIRequest.writeBodyRequest(con, task.toJSON());
 
@@ -231,7 +239,7 @@ public class ControllerTask {
     }
 
     public static List<Task> getTasks() throws IOException {
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/tasks/getAll"));
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/tasks/getAll"));
 
         String response = APIRequest.getResponse(con);
 
@@ -242,7 +250,7 @@ public class ControllerTask {
 
     public static Task getTaskByName(String name) throws IOException {
 
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/tasks/getByName?name=" + name));
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/tasks/getByName?name=" + name));
 
         String response = APIRequest.getResponse(con);
 
@@ -252,7 +260,7 @@ public class ControllerTask {
     }
 
     public static List<Task> getTasksByStatus(Task.Status status) throws IOException {
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/tasks/getByStatus?status=" + status.name()));
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/tasks/getByStatus?status=" + status.name()));
 
         String response = APIRequest.getResponse(con);
 
@@ -261,9 +269,71 @@ public class ControllerTask {
         return Arrays.asList(tasks);
     }
 
+    public static List<User> getUsersAssignToTask(Task task) throws IOException {
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getUsersAssignToTask?taskName=" + task.name));
 
+        String response = APIRequest.getResponse(con);
 
-    public int addUserToTask(String userName) {
+        User[] users = new Gson().fromJson(response.toString(), User[].class);
+
+        return Arrays.asList(users);
+    }
+
+    public static List<Flag> getFlagsAssignToTask(Task task) throws IOException {
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getFlagsAssignToTask?taskName=" + task.name));
+
+        String response = APIRequest.getResponse(con);
+
+        Flag[] flags = new Gson().fromJson(response.toString(), Flag[].class);
+
+        return Arrays.asList(flags);
+    }
+
+    public static int assignUserToTask(User user, Task task) throws IOException {
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL(References.URL_API + "/assignUserToTask"));
+
+        APIRequest.writeBodyRequest(con, "{\"userPseudo\"=\"" + user.pseudo + "\",\"taskName\"=\"" + task.name +"\"}");
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int unassignUserToTask(User user, Task task) throws IOException {
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL(References.URL_API + "/unassignUserToTask"));
+
+        APIRequest.writeBodyRequest(con, "{\"userPseudo\"=\"" + user.pseudo + "\",\"taskName\"=\"" + task.name +"\"}");
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int assignFlagToTask(Flag flag, Task task) throws IOException {
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL(References.URL_API + "/assignFlagToTask"));
+
+        APIRequest.writeBodyRequest(con, "{\"flagName\"=\"" + flag.name + "\",\"taskName\"=\"" + task.name +"\"}");
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int unassignFlagToTask(Flag flag, Task task) throws IOException {
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL(References.URL_API + "/unassignFlagToTask"));
+
+        APIRequest.writeBodyRequest(con, "{\"flagName\"=\"" + flag.name + "\",\"taskName\"=\"" + task.name +"\"}");
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
         return 1;
     }
 

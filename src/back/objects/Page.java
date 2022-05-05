@@ -19,6 +19,8 @@ public enum Page {
     TASK_ADD,
     TASK_DELETE,
     TASK_UPDATE,
+    TASK_USERS,
+    TASK_FLAGS,
 
     FLAG,
     FLAG_MENU,

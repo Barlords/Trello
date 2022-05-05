@@ -2,6 +2,7 @@ package front.cli;
 
 import back.controller.ControllerTask;
 import back.controller.ControllerUser;
+import back.objects.Flag;
 import back.objects.Page;
 import back.objects.Task;
 import back.objects.User;
@@ -22,9 +23,17 @@ public class CLITask {
                 CLIUtils.getInstance().getToolBar() +
                 "    |    TACHE !                                                                                |\n" +
                 "    |                                                                                           |\n" +
-                String.format("    |        Nom : %70s    |", task.name) +
-                String.format("    |        Description : %62s    |", task.description) +
-                "    |                                                                                           |\n" +
+                String.format("    |        Nom : %-70s    |", task.name) +
+                String.format("    |        Description : %-62s    |", task.description) +
+                "    |        Participants :                                                                     |\n";
+        for(User user : users) {
+            str += String.format("    |          -  %-70s", user.pseudo);
+        }
+        str +=  "    |        Tags :                                                                             |\n";
+        for(Flag flag : flags) {
+            str += String.format("    |          -  %-70s", flag.name);
+        }
+        str +=  "    |                                                                                           |\n" +
                 "    |                                                                                           |\n" +
                 CLIUtils.getInstance().getEndPage();
         System.out.println(str);
@@ -61,6 +70,8 @@ public class CLITask {
                         "    |        [1] - Ajouter une tâche                                                            |\n" +
                         "    |        [2] - Supprimer une tâche                                                          |\n" +
                         "    |        [3] - Modifier une tâche                                                           |\n" +
+                        "    |        [4] - Gérer les utilisateurs d'une tâche                                           |\n" +
+                        "    |        [5] - Gérer les tags d'une tâche                                                   |\n" +
                         "    |                                                                                           |\n" +
                         "    |                                                                                           |\n";
 
@@ -130,6 +141,26 @@ public class CLITask {
         CLIApp.getInstance().actualPage = Page.TASK_MENU;
     }
 
+    public void usersOnTask() throws IOException {
+        printFrontTaskViewAll();
+
+        Scanner scan = new Scanner(System.in);
+        System.out.println("GESTION D'UNE TACHE !");
+        System.out.print("Nom de la tâche à gérer : ");
+        String choice = scan.nextLine();
+        Task task = ControllerTask.getTaskByName(choice);
+        if(task == null) {
+            System.out.println("error : l'utilisateur n'existe pas");
+            return;
+        }
+        printFrontTask(task);
+
+    }
+
+    public void flagsOnTask() throws IOException {
+
+    }
+
 
     public void menuTask() throws IOException {
         printFrontTaskMenu();
@@ -161,6 +192,12 @@ public class CLITask {
                 break;
             case "3":
                 CLIApp.getInstance().actualPage = Page.TASK_UPDATE;
+                break;
+            case "4":
+                CLIApp.getInstance().actualPage = Page.TASK_USERS;
+                break;
+            case "5":
+                CLIApp.getInstance().actualPage = Page.TASK_FLAGS;
                 break;
         }
     }
