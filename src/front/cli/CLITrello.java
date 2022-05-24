@@ -21,7 +21,7 @@ public class CLITrello {
     }
 
     private String getListTasksBySatusToPrint(Task.Status status) throws IOException {
-        List<Task> tasks = _trello._tasks.stream().filter(task -> task.status == status).collect(Collectors.toList());
+        List<Task> tasks = Trello.getInstance()._tasks.stream().filter(task -> task.status == status).collect(Collectors.toList());
         String str = "";
         if(tasks.size() == 0) {
             str += "    |            Aucune tâche                                                                   |\n";
@@ -55,9 +55,9 @@ public class CLITrello {
     }
 
     public void actionOfTrello() throws IOException {
-        _trello._users = ControllerUser.getUsers();
-        _trello._tasks = ControllerTask.getTasks();
-        _trello._flags = ControllerFlag.getFlags();
+        Trello.getInstance()._users = ControllerUser.getUsers();
+        Trello.getInstance()._tasks = ControllerTask.getTasks();
+        Trello.getInstance()._flags = ControllerFlag.getFlags();
         printFrontTrello();
         String choice = CLIApp.getInstance().scanChoice();
         switch(choice) {

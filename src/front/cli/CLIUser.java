@@ -99,31 +99,9 @@ public class CLIUser {
         ControllerUser.createUser(new User(choice));
         CLIApp.getInstance().actualPage = Page.USER_MENU;
     }
-/*
-    public void deleteUser() throws IOException {
-        printFrontUserViewAll();
-
-        System.out.println("SUPPRESSION D'UN UTILISATEUR !");
-        System.out.print("Nom de l'utilisateur à supprimer : ");
-        String choice = new Scanner(System.in).nextLine();
-
-        ControllerUser.deleteUser(choice);
-        CLIApp.getInstance().actualPage = Page.USER_MENU;
-    }*/
 
     public void updateUser() throws IOException {
         printFrontUserViewAll();
-/*
-        Scanner scan = new Scanner(System.in);
-        System.out.println("MODIFICATION D'UN UTILISATEUR !");
-        System.out.print("Nom de l'utilisateur à modifier : ");
-        String choice = scan.nextLine();
-        User user = ControllerUser.getUserByPseudo(choice);
-        if(user == null) {
-            System.out.println("erreur : l'utilisateur n'existe pas");
-            CLIApp.getInstance().actualPage = Page.USER_MENU;
-            return;
-        }*/
 
         Scanner scan = new Scanner(System.in);
 
@@ -161,7 +139,7 @@ public class CLIUser {
     }
 
     public void actionMenuUser() throws IOException {
-        CLITrello.getInstance()._trello._users = ControllerUser.getUsers();
+        Trello.getInstance()._users = ControllerUser.getUsers();
         printFrontUserMenu();
         String choice = CLIApp.getInstance().scanChoice();
         switch(choice) {
@@ -187,9 +165,6 @@ public class CLIUser {
                 CLIApp.getInstance().actualPage = Page.USER_ADD;
                 break;
             case "2":
-                CLIApp.getInstance().actualPage = Page.USER_DELETE;
-                break;
-            case "3":
                 CLIApp.getInstance().actualPage = Page.USER;
                 break;
         }
