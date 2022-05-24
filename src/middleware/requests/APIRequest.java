@@ -7,7 +7,9 @@ import java.nio.charset.StandardCharsets;
 
 public class APIRequest {
 
-
+    public static String formatToRequestURL(String str) {
+        return str.replace(" ", "%20");
+    }
 
     public static void writeBodyRequest(HttpURLConnection con, String content) throws IOException {
         try(OutputStream os = con.getOutputStream()) {
@@ -22,7 +24,7 @@ public class APIRequest {
         System.out.println("Result : " + con.getResponseMessage());
         try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder response = new StringBuilder();
-            String responseLine = null;
+            String responseLine;
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }

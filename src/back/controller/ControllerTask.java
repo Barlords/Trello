@@ -227,7 +227,7 @@ public class ControllerTask {
     }
 
     public static int updateTask(String name, Task task) throws IOException {
-        HttpURLConnection con = APIRequest.Update.getConByURL(new URL(References.URL_API + "/tasks/update?name=" + name));
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL(References.URL_API + "/tasks/update?name=" + APIRequest.formatToRequestURL(name)));
 
         APIRequest.writeBodyRequest(con, task.toJSON());
 
@@ -239,6 +239,8 @@ public class ControllerTask {
     }
 
     public static List<Task> getTasks() throws IOException {
+        System.out.println(References.URL_API + "/tasks/getAll");
+
         HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/tasks/getAll"));
 
         String response = APIRequest.getResponse(con);
@@ -250,7 +252,7 @@ public class ControllerTask {
 
     public static Task getTaskByName(String name) throws IOException {
 
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/tasks/getByName?name=" + name));
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/tasks/getByName?name=" + APIRequest.formatToRequestURL(name)));
 
         String response = APIRequest.getResponse(con);
 
@@ -270,7 +272,7 @@ public class ControllerTask {
     }
 
     public static List<User> getUsersAssignToTask(Task task) throws IOException {
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getUsersAssignToTask?taskName=" + task.name));
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getUsersAssignToTask?taskName=" + APIRequest.formatToRequestURL(task.name)));
 
         String response = APIRequest.getResponse(con);
 
@@ -280,7 +282,7 @@ public class ControllerTask {
     }
 
     public static List<Flag> getFlagsAssignToTask(Task task) throws IOException {
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getFlagsAssignToTask?taskName=" + task.name));
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getFlagsAssignToTask?taskName=" + APIRequest.formatToRequestURL(task.name)));
 
         String response = APIRequest.getResponse(con);
 
@@ -292,7 +294,7 @@ public class ControllerTask {
     public static int assignUserToTask(User user, Task task) throws IOException {
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL(References.URL_API + "/assignUserToTask"));
 
-        APIRequest.writeBodyRequest(con, "{\"userPseudo\"=\"" + user.pseudo + "\",\"taskName\"=\"" + task.name +"\"}");
+        APIRequest.writeBodyRequest(con, "{\"userPseudo\"=\"" + APIRequest.formatToRequestURL(user.pseudo) + "\",\"taskName\"=\"" + APIRequest.formatToRequestURL(task.name) +"\"}");
 
         String response = APIRequest.getResponse(con);
 
@@ -304,7 +306,7 @@ public class ControllerTask {
     public static int unassignUserToTask(User user, Task task) throws IOException {
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL(References.URL_API + "/unassignUserToTask"));
 
-        APIRequest.writeBodyRequest(con, "{\"userPseudo\"=\"" + user.pseudo + "\",\"taskName\"=\"" + task.name +"\"}");
+        APIRequest.writeBodyRequest(con, "{\"userPseudo\"=\"" + APIRequest.formatToRequestURL(user.pseudo) + "\",\"taskName\"=\"" + APIRequest.formatToRequestURL(task.name) +"\"}");
 
         String response = APIRequest.getResponse(con);
 
@@ -316,7 +318,7 @@ public class ControllerTask {
     public static int assignFlagToTask(Flag flag, Task task) throws IOException {
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL(References.URL_API + "/assignFlagToTask"));
 
-        APIRequest.writeBodyRequest(con, "{\"flagName\"=\"" + flag.name + "\",\"taskName\"=\"" + task.name +"\"}");
+        APIRequest.writeBodyRequest(con, "{\"flagName\"=\"" + APIRequest.formatToRequestURL(flag.name) + "\",\"taskName\"=\"" + APIRequest.formatToRequestURL(task.name) +"\"}");
 
         String response = APIRequest.getResponse(con);
 
@@ -328,7 +330,7 @@ public class ControllerTask {
     public static int unassignFlagToTask(Flag flag, Task task) throws IOException {
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL(References.URL_API + "/unassignFlagToTask"));
 
-        APIRequest.writeBodyRequest(con, "{\"flagName\"=\"" + flag.name + "\",\"taskName\"=\"" + task.name +"\"}");
+        APIRequest.writeBodyRequest(con, "{\"flagName\"=\"" + APIRequest.formatToRequestURL(flag.name) + "\",\"taskName\"=\"" + APIRequest.formatToRequestURL(task.name) +"\"}");
 
         String response = APIRequest.getResponse(con);
 

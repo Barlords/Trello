@@ -1,5 +1,8 @@
 package back.controller;
 
+import back.objects.Flag;
+import back.objects.Task;
+import back.objects.User;
 import front.gui.flag.GUIFlag;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -10,6 +13,8 @@ import front.gui.task.GuiTask;
 import front.gui.user.GUIUser;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ControllerTrello {

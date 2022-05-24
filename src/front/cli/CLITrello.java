@@ -1,23 +1,27 @@
 package front.cli;
 
+import back.controller.ControllerFlag;
 import back.controller.ControllerTask;
+import back.controller.ControllerTrello;
 import back.controller.ControllerUser;
-import back.objects.Page;
-import back.objects.Task;
-import back.objects.User;
+import back.objects.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CLITrello {
 
     private static CLITrello instance;
+    public Trello _trello;
 
     private CLITrello() {
+        _trello = new Trello();
     }
 
     private String getListTasksBySatusToPrint(Task.Status status) throws IOException {
-        List<Task> tasks = ControllerTask.getTasksByStatus(status);
+        List<Task> tasks = _trello._tasks.stream().filter(task -> task.status == status).collect(Collectors.toList());
         String str = "";
         if(tasks.size() == 0) {
             str += "    |            Aucune tâche                                                                   |\n";
@@ -51,6 +55,9 @@ public class CLITrello {
     }
 
     public void actionOfTrello() throws IOException {
+        _trello._users = ControllerUser.getUsers();
+        _trello._tasks = ControllerTask.getTasks();
+        _trello._flags = ControllerFlag.getFlags();
         printFrontTrello();
         String choice = CLIApp.getInstance().scanChoice();
         switch(choice) {

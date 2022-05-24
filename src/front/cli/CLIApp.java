@@ -1,7 +1,9 @@
 package front.cli;
 
 import back.objects.Page;
+import back.objects.Trello;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class CLIApp {
@@ -9,6 +11,7 @@ public class CLIApp {
     private static CLIApp instance;
     public Scanner scan;
     public Page actualPage;
+    public List<Trello> trellos;
 
     private CLIApp() {
         scan = new Scanner(System.in);
@@ -25,16 +28,17 @@ public class CLIApp {
                     CLITrello.getInstance().actionOfTrello();
                     break;
                 case USER:
+                    CLIUser.getInstance().consultUser();
                     break;
                 case USER_MENU:
-                    CLIUser.getInstance().menuUser();
+                    CLIUser.getInstance().actionMenuUser();
                     break;
                 case USER_ADD:
                     CLIUser.getInstance().addUser();
-                    break;
+                    break;/*
                 case USER_DELETE:
                     CLIUser.getInstance().deleteUser();
-                    break;
+                    break;*/
                 case USER_UPDATE:
                     CLIUser.getInstance().updateUser();
                     break;

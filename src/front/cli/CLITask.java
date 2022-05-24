@@ -26,11 +26,11 @@ public class CLITask {
                 String.format("    |        Nom : %-70s    |", task.name) +
                 String.format("    |        Description : %-62s    |", task.description) +
                 "    |        Participants :                                                                     |\n";
-        for(User user : users) {
+        for(User user : ControllerTask.getUsersAssignToTask(task)) {
             str += String.format("    |          -  %-70s", user.pseudo);
         }
         str +=  "    |        Tags :                                                                             |\n";
-        for(Flag flag : flags) {
+        for(Flag flag : ControllerTask.getFlagsAssignToTask(task)) {
             str += String.format("    |          -  %-70s", flag.name);
         }
         str +=  "    |                                                                                           |\n" +

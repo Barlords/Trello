@@ -230,6 +230,8 @@ public class ControllerFlag {
     }
 
     public static List<Flag> getFlags() throws IOException {
+        System.out.println(References.URL_API + "/flags/getAll");
+
         HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/flags/getAll"));
 
         String response = APIRequest.getResponse(con);

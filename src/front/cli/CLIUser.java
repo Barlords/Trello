@@ -1,6 +1,8 @@
 package front.cli;
 
+import back.controller.ControllerTrello;
 import back.objects.Page;
+import back.objects.Trello;
 import back.objects.User;
 import back.controller.ControllerUser;
 
@@ -16,7 +18,7 @@ public class CLIUser {
     }
 
     private String getListUsersToPrint() throws IOException {
-        List<User> users = ControllerUser.getUsers();
+        List<User> users = Trello.getInstance()._users;
         String str =    "    |    LISTE DES UTILISATEURS !                                                               |\n" +
                         "    |                                                                                           |\n";
         if(users.size() == 0) {
@@ -35,8 +37,12 @@ public class CLIUser {
                 CLIUtils.getInstance().getToolBar() +
                 "    |    UTILISATEUR !                                                                          |\n" +
                 "    |                                                                                           |\n" +
-                String.format("    |        Pseudo : %70s    |", user.pseudo) +
+                String.format("    |        Pseudo : %-70s    |\n", user.pseudo) +
                 "    |                                                                                           |\n" +
+                "    |    Que voulez vous faire :                                                                |\n" +
+                "    |        [1] - Modifier l'utilisateur                                                       |\n" +
+                "    |        [2] - Supprimer l' utilisateur                                                     |\n" +
+                "    |        [Q] - Retour                                                                       |\n" +
                 "    |                                                                                           |\n" +
                 CLIUtils.getInstance().getEndPage();
         System.out.println(str);
@@ -44,38 +50,56 @@ public class CLIUser {
 
     private void printFrontUserMenu() throws IOException {
 
-        String str = CLIUtils.getInstance().getToolBar() +
-                        "    |    MENU UTILISATEUR !                                                                     |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |    Que voulez vous faire :                                                                |\n" +
-                        "    |        [1] - Ajouter un utilisateur                                                       |\n" +
-                        "    |        [2] - Supprimer un utilisateur                                                     |\n" +
-                        "    |        [3] - Modifier un utilisateur                                                      |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n";
-        str += getListUsersToPrint();
-        str += CLIUtils.getInstance().getEndPage();
+        String str =
+                CLIUtils.getInstance().getToolBar() +
+                "    |    MENU UTILISATEUR !                                                                     |\n" +
+                "    |                                                                                           |\n" +
+                "    |    Que voulez vous faire :                                                                |\n" +
+                "    |        [1] - Ajouter un utilisateur                                                       |\n" +
+                "    |        [2] - Consulter un utilisateur                                                     |\n" +
+                "    |                                                                                           |\n" +
+                "    |                                                                                           |\n" +
+                getListUsersToPrint() +
+                CLIUtils.getInstance().getEndPage();
         System.out.println(str);
     }
 
     private void printFrontUserViewAll() throws IOException {
-        String str = CLIUtils.getInstance().getToolBar();
-        str += getListUsersToPrint();
-        str += CLIUtils.getInstance().getEndPage();
+        String str =
+                CLIUtils.getInstance().getToolBar() +
+                getListUsersToPrint() +
+                CLIUtils.getInstance().getEndPage();
         System.out.println(str);
+    }
+
+    public void consultUser() throws IOException {
+        printFrontUserViewAll();
+
+        System.out.println("CONSULTATION D'UN UTILISATEUR !");
+        System.out.print("Nom de l'utilisateur à consulter: ");
+        String choice = new Scanner(System.in).nextLine();
+        User user = ControllerUser.getUserByPseudo(choice);
+        if(user == null) {
+            System.out.println("Utilisateur non trouvé");
+            CLIApp.getInstance().actualPage = Page.USER_MENU;
+            return;
+        }
+        Trello.getInstance().currentUser = user;
+        actionUser(user);
+
     }
 
     public void addUser() throws IOException {
         printFrontUserViewAll();
 
         System.out.println("CREATION D'UN UTILISATEUR !");
-        System.out.print("Nom de l'utilisateur : ");
+        System.out.print("Nom de l'utilisateur à créer: ");
         String choice = new Scanner(System.in).nextLine();
 
         ControllerUser.createUser(new User(choice));
         CLIApp.getInstance().actualPage = Page.USER_MENU;
     }
-
+/*
     public void deleteUser() throws IOException {
         printFrontUserViewAll();
 
@@ -85,11 +109,11 @@ public class CLIUser {
 
         ControllerUser.deleteUser(choice);
         CLIApp.getInstance().actualPage = Page.USER_MENU;
-    }
+    }*/
 
     public void updateUser() throws IOException {
         printFrontUserViewAll();
-
+/*
         Scanner scan = new Scanner(System.in);
         System.out.println("MODIFICATION D'UN UTILISATEUR !");
         System.out.print("Nom de l'utilisateur à modifier : ");
@@ -99,24 +123,45 @@ public class CLIUser {
             System.out.println("erreur : l'utilisateur n'existe pas");
             CLIApp.getInstance().actualPage = Page.USER_MENU;
             return;
-        }
+        }*/
 
-        User userUp = new User(user);
-        System.out.println("MODIFICATION \n{");
+        Scanner scan = new Scanner(System.in);
+
+        User userUp = new User(Trello.getInstance().currentUser);
+        System.out.println("MODIFICATION\n" +
+                "Laisser le champ vide si vous ne voulez pas apporter de modification\n" +
+                "{");
+
         System.out.print("    Pseudo : ");
-        choice = scan.nextLine();
-        if(choice.equals("")) {
-            System.out.println("erreur : champ vide");
-            CLIApp.getInstance().actualPage = Page.USER_MENU;
-            return;
+        String choice = scan.nextLine();
+        if(!choice.equals("")) {
+            userUp.pseudo = choice;
         }
-        userUp.pseudo = choice;
+        System.out.println("}");
+        ControllerUser.updateUser(Trello.getInstance().currentUser.pseudo, userUp);
 
-        ControllerUser.updateUser(user.pseudo, userUp);
-        CLIApp.getInstance().actualPage = Page.USER_MENU;
     }
 
-    public void menuUser() throws IOException {
+    public void actionUser(User user) throws IOException {
+        printFrontUser(user);
+        String choice = new Scanner(System.in).nextLine();
+        switch(choice) {
+            case "1":
+                updateUser();
+                CLIApp.getInstance().actualPage = Page.USER;
+                break;
+            case "2":
+                ControllerUser.deleteUser(Trello.getInstance().currentUser.pseudo);
+                CLIApp.getInstance().actualPage = Page.USER_MENU;
+                break;
+            case "q":
+                CLIApp.getInstance().actualPage = Page.USER_MENU;
+                break;
+        }
+    }
+
+    public void actionMenuUser() throws IOException {
+        CLITrello.getInstance()._trello._users = ControllerUser.getUsers();
         printFrontUserMenu();
         String choice = CLIApp.getInstance().scanChoice();
         switch(choice) {
@@ -145,7 +190,7 @@ public class CLIUser {
                 CLIApp.getInstance().actualPage = Page.USER_DELETE;
                 break;
             case "3":
-                CLIApp.getInstance().actualPage = Page.USER_UPDATE;
+                CLIApp.getInstance().actualPage = Page.USER;
                 break;
         }
     }

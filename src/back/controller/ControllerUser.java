@@ -226,6 +226,8 @@ public class ControllerUser {
 
     public static List<User> getUsers() throws IOException {
 
+        System.out.println(References.URL_API + "/users/getAll");
+
         HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/users/getAll"));
 
         String response = APIRequest.getResponse(con);
