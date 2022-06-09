@@ -65,9 +65,10 @@ public class CLIFlag {
     }
 
     private void printFrontFlagViewAll() throws IOException {
-        String str = CLIUtils.getInstance().getToolBar();
-        str += getListFlagsToPrint();
-        str += CLIUtils.getInstance().getEndPage();
+        String str =
+                CLIUtils.getInstance().getHeader() +
+                getListFlagsToPrint() +
+                CLIUtils.getInstance().getEndPage();
         System.out.println(str);
     }
 
@@ -125,7 +126,7 @@ public class CLIFlag {
 
     public void menuFlag() throws IOException {
         printFrontFlagMenu();
-        String choice = CLIApp.getInstance().scanChoice();
+        String choice = CLIApp.getInstance().scanChoice(true);
         switch(choice) {
             case "a":
                 CLIApp.getInstance().actualPage = Page.TRELLO;
@@ -157,6 +158,11 @@ public class CLIFlag {
         }
     }
 
+    /**
+     * Retourne l'instance du singleton
+     * Si elle n'éxiste pas, créer une instance et la retourne
+     * @return instance du singleton
+     */
     public static CLIFlag getInstance() {
         if (instance == null) {
             instance = new CLIFlag();

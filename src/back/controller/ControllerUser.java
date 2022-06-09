@@ -1,6 +1,7 @@
 package back.controller;
 
 import app.References;
+import back.objects.Task;
 import com.google.gson.Gson;
 import front.gui.flag.GUIFlag;
 import front.gui.user.GUIUser;
@@ -16,6 +17,7 @@ import middleware.requests.APIRequest;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -250,7 +252,52 @@ public class ControllerUser {
         return user;
     }
 
+    public static List<Task> getTasksAssignToUser(String pseudo) throws IOException {
 
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/getTasksAssignToUser?pseudo=" + pseudo));
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        Task[] tasks = new Gson().fromJson(response, Task[].class);
+
+        return Arrays.asList(tasks);
+    }
+
+    public static int assignUserToTask(String pseudo, String taskName) throws IOException {
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/assignUserToTask"));
+
+        APIRequest.writeBodyRequest(con, String.format(
+                "{" +
+                        "\"pseudo\": \"%s\", " +
+                        "\"taskName\": \"%s\"" +
+                "}",
+                pseudo, taskName));
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int unassignUserToTask(String pseudo, String taskName) throws IOException {
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/unassignUserToTask"));
+
+        APIRequest.writeBodyRequest(con, String.format(
+                "{" +
+                        "\"pseudo\": \"%s\", " +
+                        "\"taskName\": \"%s\"" +
+                        "}",
+                pseudo, taskName));
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
 
 
 }

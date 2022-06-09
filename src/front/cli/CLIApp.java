@@ -1,85 +1,51 @@
 package front.cli;
 
 import back.objects.Page;
-import back.objects.Trello;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class CLIApp {
 
     private static CLIApp instance;
-    public Scanner scan;
+    private final Scanner scanner;
     public Page actualPage;
-    public List<Trello> trellos;
 
     private CLIApp() {
-        scan = new Scanner(System.in);
+        scanner = new Scanner(System.in);
     }
+
 
     public void launch() throws Exception {
         actualPage = Page.APP;
         while(true) {
             switch(actualPage) {
                 case APP:
-                    actionOfApp();
+                    actionAppMenu();
                     break;
                 case TRELLO:
-                    CLITrello.getInstance().actionOfTrello();
+                    CLITrello.getInstance().actionTrello();
                     break;
                 case USER:
-                    CLIUser.getInstance().consultUser();
+                    CLIUser.getInstance().actionUser();
                     break;
                 case USER_MENU:
                     CLIUser.getInstance().actionMenuUser();
                     break;
-                case USER_ADD:
-                    CLIUser.getInstance().addUser();
-                    break;/*
-                case USER_DELETE:
-                    CLIUser.getInstance().deleteUser();
-                    break;*/
-                case USER_UPDATE:
-                    CLIUser.getInstance().updateUser();
-                    break;
                 case TASK:
+                    CLITask.getInstance().actionTask();
                     break;
                 case TASK_MENU:
-                    CLITask.getInstance().menuTask();
-                    break;
-                case TASK_ADD:
-                    CLITask.getInstance().addTask();
-                    break;
-                case TASK_DELETE:
-                    CLITask.getInstance().deleteTask();
-                    break;
-                case TASK_UPDATE:
-                    CLITask.getInstance().updateTask();
-                    break;
-                case TASK_USERS:
-                    CLITask.getInstance().usersOnTask();
-                    break;
-                case TASK_FLAGS:
-                    CLITask.getInstance().flagsOnTask();
+                    CLITask.getInstance().actionMenuTask();
                     break;
                 case FLAG:
                     break;
                 case FLAG_MENU:
                     CLIFlag.getInstance().menuFlag();
                     break;
-                case FLAG_ADD:
-                    CLIFlag.getInstance().addFlag();
-                    break;
-                case FLAG_DELETE:
-                    CLIFlag.getInstance().deleteFlag();
-                    break;
-                case FLAG_UPDATE:
-                    CLIFlag.getInstance().updateFlag();
-                    break;
                 case HELP:
                     break;
                 case QUIT:
-                    System.out.println("Hey! Il reste du taff ne part pas :P");
+                    System.out.println("Hey! Il reste du taff ne partez pas :P");
                     return;
                 default:
                     throw new Exception("Page indéterminée");
@@ -87,7 +53,7 @@ public class CLIApp {
         }
     }
 
-    private void printFrontApp() {
+    private void screenAppMenu() {
         System.out.println(
                 "\n /¯\\¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\\\n" +
                         " \\_,|                                                    |\n" +
@@ -103,9 +69,13 @@ public class CLIApp {
                         "    \\_/__________________________________________________/");
     }
 
-    public void actionOfApp() {
-        printFrontApp();
-        String choice = scanChoice();
+    /**
+     * Gère les actions lié au screen de l'application
+     * Actualise la page en fonction de l'action
+     */
+    public void actionAppMenu() {
+        screenAppMenu();
+        String choice = scanChoice(true);
         try {
             int value = Integer.parseInt(choice);
             CLIApp.getInstance().actualPage = Page.TRELLO;
@@ -126,11 +96,23 @@ public class CLIApp {
         }
     }
 
-    public String scanChoice() {
+    public String scanChoice(boolean toLowerCase) {
         System.out.print("Choix : ");
-        return scan.nextLine().toLowerCase();
+        return scanNextLine(toLowerCase);
     }
 
+    public String scanNextLine(boolean toLowerCase) {
+        if(toLowerCase)  {
+            return scanner.nextLine().toLowerCase();
+        }
+        return scanner.nextLine();
+    }
+
+    /**
+     * Retourne l'instance du singleton
+     * Si elle n'éxiste pas, créer une instance et la retourne
+     * @return instance du singleton
+     */
     public static CLIApp getInstance() {
         if (instance == null) {
             instance = new CLIApp();

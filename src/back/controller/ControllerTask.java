@@ -271,36 +271,28 @@ public class ControllerTask {
         return Arrays.asList(tasks);
     }
 
-    public static List<User> getUsersAssignToTask(Task task) throws IOException {
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getUsersAssignToTask?taskName=" + APIRequest.formatToRequestURL(task.name)));
+    public static List<User> getUsersAssignToTask(String taskName) throws IOException {
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getUsersAssignToTask?taskName=" + APIRequest.formatToRequestURL(taskName)));
 
         String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
 
         User[] users = new Gson().fromJson(response.toString(), User[].class);
 
         return Arrays.asList(users);
     }
 
-    public static List<Flag> getFlagsAssignToTask(Task task) throws IOException {
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getFlagsAssignToTask?taskName=" + APIRequest.formatToRequestURL(task.name)));
-
-        String response = APIRequest.getResponse(con);
-
-        Flag[] flags = new Gson().fromJson(response.toString(), Flag[].class);
-
-        return Arrays.asList(flags);
-    }
-
-    public static int assignUserToTask(User user, Task task) throws IOException {
-        HttpURLConnection con = APIRequest.Create.getConByURL(new URL(References.URL_API + "/assignUserToTask"));
-
-        APIRequest.writeBodyRequest(con, "{\"userPseudo\"=\"" + APIRequest.formatToRequestURL(user.pseudo) + "\",\"taskName\"=\"" + APIRequest.formatToRequestURL(task.name) +"\"}");
+    public static List<Flag> getFlagsAssignToTask(String taskName) throws IOException {
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL(References.URL_API + "/getFlagsAssignToTask?taskName=" + APIRequest.formatToRequestURL(taskName)));
 
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
 
-        return 1;
+        Flag[] flags = new Gson().fromJson(response.toString(), Flag[].class);
+
+        return Arrays.asList(flags);
     }
 
     public static int unassignUserToTask(User user, Task task) throws IOException {

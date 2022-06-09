@@ -2,12 +2,10 @@ package front.cli;
 
 import back.controller.ControllerFlag;
 import back.controller.ControllerTask;
-import back.controller.ControllerTrello;
 import back.controller.ControllerUser;
 import back.objects.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +32,7 @@ public class CLITrello {
         return str;
     }
 
-    private void printFrontTrello() throws IOException {
+    private void screenTrello() throws IOException {
 
         String str = CLIUtils.getInstance().getToolBar();
 
@@ -54,34 +52,20 @@ public class CLITrello {
         System.out.println(str);
     }
 
-    public void actionOfTrello() throws IOException {
+    public void actionTrello() throws IOException {
         Trello.getInstance()._users = ControllerUser.getUsers();
         Trello.getInstance()._tasks = ControllerTask.getTasks();
         Trello.getInstance()._flags = ControllerFlag.getFlags();
-        printFrontTrello();
-        String choice = CLIApp.getInstance().scanChoice();
-        switch(choice) {
-            case "a":
-                CLIApp.getInstance().actualPage = Page.TRELLO;
-                break;
-            case "z":
-                CLIApp.getInstance().actualPage = Page.USER_MENU;
-                break;
-            case "e":
-                CLIApp.getInstance().actualPage = Page.TASK_MENU;
-                break;
-            case "r":
-                CLIApp.getInstance().actualPage = Page.FLAG_MENU;
-                break;
-            case "t":
-                CLIApp.getInstance().actualPage = Page.HELP;
-                break;
-            case "x" :
-                CLIApp.getInstance().actualPage = Page.QUIT;
-                break;
-        }
+        screenTrello();
+        String choice = CLIApp.getInstance().scanChoice(true);
+        CLIUtils.getInstance().actionToolBar(choice);
     }
 
+    /**
+     * Retourne l'instance du singleton
+     * Si elle n'éxiste pas, créer une instance et la retourne
+     * @return instance du singleton
+     */
     public static CLITrello getInstance() {
         if (instance == null) {
             instance = new CLITrello();

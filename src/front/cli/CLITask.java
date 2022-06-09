@@ -1,11 +1,9 @@
 package front.cli;
 
+import back.controller.ControllerFlag;
 import back.controller.ControllerTask;
 import back.controller.ControllerUser;
-import back.objects.Flag;
-import back.objects.Page;
-import back.objects.Task;
-import back.objects.User;
+import back.objects.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,29 +16,9 @@ public class CLITask {
     private CLITask() {
     }
 
-    private void printFrontTask(Task task) throws IOException {
-        String str =
-                CLIUtils.getInstance().getToolBar() +
-                "    |    TACHE !                                                                                |\n" +
-                "    |                                                                                           |\n" +
-                String.format("    |        Nom : %-70s    |", task.name) +
-                String.format("    |        Description : %-62s    |", task.description) +
-                "    |        Participants :                                                                     |\n";
-        for(User user : ControllerTask.getUsersAssignToTask(task)) {
-            str += String.format("    |          -  %-70s", user.pseudo);
-        }
-        str +=  "    |        Tags :                                                                             |\n";
-        for(Flag flag : ControllerTask.getFlagsAssignToTask(task)) {
-            str += String.format("    |          -  %-70s", flag.name);
-        }
-        str +=  "    |                                                                                           |\n" +
-                "    |                                                                                           |\n" +
-                CLIUtils.getInstance().getEndPage();
-        System.out.println(str);
-    }
-
+    // GET LIST
     private String getListTasksToPrint() throws IOException {
-        List<Task> tasks = ControllerTask.getTasks();
+        List<Task> tasks = Trello.getInstance()._tasks;
         String str =    "    |    LISTE DES TACHES !                                                                     |\n" +
                         "    |                                                                                           |\n";
 
@@ -49,7 +27,7 @@ public class CLITask {
         }
         else {
             for(Task task : tasks) {
-                str += String.format("    |      -  %-78s    |\n", task.name);
+                str += String.format("    |      -  %-76s    |\n", "'"+task.name+"'");
                 if(task.description.length() > 74) {
                     str += String.format("    |             %-71s...    |\n", task.description.substring(0, 71));
                 }
@@ -61,147 +39,255 @@ public class CLITask {
         return str;
     }
 
-    private void printFrontTaskMenu() throws IOException {
-        String str = CLIUtils.getInstance().getToolBar();
+    private String getListUsersAssignedToTaskToPrint() throws IOException {
+        List<User> users = ControllerTask.getUsersAssignToTask(Trello.getInstance().currentTask.name);
+        String str =    "    |    UTILISATEURS ASSIGNE A LA TÂCHE                                                                      |\n";
+        if(users.size() == 0) {
+            str += "    |        Aucun utilisateur.                                                                               |\n";
+        }
+        else {
+            for(User user : users) {
+                str += String.format("    |        -  %-76s    |\n", "'" + user.pseudo + "'");
+            }
+        }
+        return str;
+    }
 
-        str +=          "    |    MENU TACHE !                                                                           |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |    Que voulez vous faire :                                                                |\n" +
-                        "    |        [1] - Ajouter une tâche                                                            |\n" +
-                        "    |        [2] - Supprimer une tâche                                                          |\n" +
-                        "    |        [3] - Modifier une tâche                                                           |\n" +
-                        "    |        [4] - Gérer les utilisateurs d'une tâche                                           |\n" +
-                        "    |        [5] - Gérer les tags d'une tâche                                                   |\n" +
-                        "    |                                                                                           |\n" +
-                        "    |                                                                                           |\n";
+    private String getListFlagsAssignedToTaskToPrint() throws IOException {
+        List<Flag> flags = ControllerTask.getFlagsAssignToTask(Trello.getInstance().currentTask.name);
+        String str =    "    |    TAG ATTRIBUE A LA TÂCHE                                                                      |\n";
+        if(flags.size() == 0) {
+            str += "    |        Aucun tag.                                                                                       |\n";
+        }
+        else {
+            for(Flag flag : flags) {
+                str += String.format("    |        -  %-76s    |\n", "'" + flag.name + "'");
+            }
+        }
+        return str;
+    }
 
-        str += getListTasksToPrint();
-
-        str += CLIUtils.getInstance().getEndPage();
-
+    // SCREEN
+    public void screenTask(Task task) throws IOException {
+        String str =
+                CLIUtils.getInstance().getToolBar() +
+                "    |    TACHE !                                                                                |\n" +
+                String.format("    |        Nom : %-70s    |\n", task.name) +
+                String.format("    |        Description : %-62s    |\n", task.description) +
+                getListUsersAssignedToTaskToPrint() +
+                getListFlagsAssignedToTaskToPrint() +
+                "    |                                                                                           |\n" +
+                "    |    Que voulez vous faire :                                                                |\n" +
+                "    |        [1] - Affecter un utilisateur à cette tâche                                        |\n" +
+                "    |        [2] - Retirer un utilisateur de cette tâche                                        |\n" +
+                "    |        [3] - Ajouter un tag à cette tâche                                                 |\n" +
+                "    |        [4] - Retirer un tag de cette tâche                                                |\n" +
+                "    |        [5] - Modifier la tâche                                                            |\n" +
+                "    |        [6] - Supprimer la tâche                                                           |\n" +
+                "    |        [Q] - Retour                                                                       |\n" +
+                CLIUtils.getInstance().getEndPage();
         System.out.println(str);
     }
 
-    private void printFrontTaskViewAll() throws IOException {
-        String str = CLIUtils.getInstance().getToolBar();
-        str += getListTasksToPrint();
-        str += CLIUtils.getInstance().getEndPage();
+    public void screenTaskMenu() throws IOException {
+        String str =
+                CLIUtils.getInstance().getToolBar() +
+                "    |    MENU TACHE !                                                                           |\n" +
+                "    |                                                                                           |\n" +
+                "    |    Que voulez vous faire :                                                                |\n" +
+                "    |        [1] - Ajouter une tâche                                                            |\n" +
+                "    |        [2] - Consulter une tâche                                                          |\n" +
+                "    |                                                                                           |\n" +
+                "    |                                                                                           |\n" +
+                getListTasksToPrint() +
+                CLIUtils.getInstance().getEndPage();
         System.out.println(str);
     }
 
-    public void addTask() throws IOException {
-        Scanner scan = new Scanner(System.in);
+    public void screenListTask() throws IOException {
+        String str =
+                CLIUtils.getInstance().getHeader() +
+                getListTasksToPrint() +
+                CLIUtils.getInstance().getEndPage();
+        System.out.println(str);
+    }
 
-        printFrontTaskViewAll();
+    // ACTIONS TASK MENU
+    public void actionMenuTask() throws IOException {
+        Trello.getInstance()._tasks = ControllerTask.getTasks();
+        screenTaskMenu();
+        String choice = CLIApp.getInstance().scanChoice(true);
+        CLIUtils.getInstance().actionToolBar(choice);
+        switch (choice) {
+            case "1":
+                addTask();
+                break;
+            case "2":
+                consultTask();
+                break;
+            default:
+                System.out.println("Merci de renseigner un choix valide");
+                break;
+        }
+    }
 
-        System.out.println("CREATION D'UNE TACHE !");
-        System.out.print("Nom de la tâche : ");
-        String name = scan.nextLine();
-        System.out.print("Description de la tâche : ");
-        String description = scan.nextLine();
+    private void addTask() throws IOException {
+        screenListTask();
+
+        System.out.print(
+                "CREATION D'UNE TACHE !\n" +
+                "{\n" +
+                "    Nom : "
+        );
+        String name = CLIApp.getInstance().scanNextLine(false);
+        System.out.print(
+                "    Description : "
+        );
+        String description = CLIApp.getInstance().scanNextLine(false);
+        System.out.println("}");
 
         ControllerTask.createTask(new Task(name, description));
         CLIApp.getInstance().actualPage = Page.TASK_MENU;
     }
 
-    public void deleteTask() throws IOException {
-        printFrontTaskViewAll();
-        System.out.println("SUPPRESSION D'UNE TACHE !");
-        System.out.print("Nom de la tâche à supprimer : ");
-        String choice = new Scanner(System.in).nextLine();
-        ControllerTask.deleteTask(choice);
-        CLIApp.getInstance().actualPage = Page.TASK_MENU;
-    }
+    private void consultTask() throws IOException {
+        screenListTask();
 
-    public void updateTask() throws IOException {
-        printFrontTaskViewAll();
-
-        Scanner scan = new Scanner(System.in);
-        System.out.println("MODIFICATION D'UNE TACHE !");
-        System.out.print("Nom de la tâche à modifier : ");
-        String choice = scan.nextLine();
+        System.out.println("CONSULTATION D'UNE TACHE !");
+        System.out.print("Nom de la tâche à consulter : ");
+        String choice = CLIApp.getInstance().scanNextLine(false);
         Task task = ControllerTask.getTaskByName(choice);
         if(task == null) {
-            System.out.println("error : l'utilisateur n'existe pas");
-            return;
-        }
-
-        Task taskUp = new Task(task);
-        System.out.println("MODIFICATION \n{");
-        System.out.print("    Nom : ");
-        choice = scan.nextLine();
-        if(choice.equals("")) {
-            System.out.println("erreur : champ vide");
+            System.out.println("Tâche non trouvée");
             CLIApp.getInstance().actualPage = Page.TASK_MENU;
             return;
         }
-        taskUp.name = choice;
-
-        ControllerTask.updateTask(task.name, taskUp);
-        CLIApp.getInstance().actualPage = Page.TASK_MENU;
+        Trello.getInstance().currentTask = task;
+        CLIApp.getInstance().actualPage = Page.TASK;
     }
 
-    public void usersOnTask() throws IOException {
-        printFrontTaskViewAll();
-
-        Scanner scan = new Scanner(System.in);
-        System.out.println("GESTION D'UNE TACHE !");
-        System.out.print("Nom de la tâche à gérer : ");
-        String choice = scan.nextLine();
-        Task task = ControllerTask.getTaskByName(choice);
-        if(task == null) {
-            System.out.println("error : l'utilisateur n'existe pas");
-            return;
-        }
-        printFrontTask(task);
-
-    }
-
-    public void flagsOnTask() throws IOException {
-
-    }
-
-
-    public void menuTask() throws IOException {
-        printFrontTaskMenu();
-        String choice = CLIApp.getInstance().scanChoice();
+    // ACTIONS TASK
+    public void actionTask() throws IOException {
+        screenTask(Trello.getInstance().currentTask);
+        String choice = CLIApp.getInstance().scanChoice(true);
+        CLIUtils.getInstance().actionToolBar(choice);
         switch(choice) {
-            case "a":
-                CLIApp.getInstance().actualPage = Page.TRELLO;
-                break;
-            case "z":
-                CLIApp.getInstance().actualPage = Page.USER_MENU;
-                break;
-            case "e":
-                CLIApp.getInstance().actualPage = Page.TASK_MENU;
-                break;
-            case "r":
-                CLIApp.getInstance().actualPage = Page.FLAG_MENU;
-                break;
-            case "t":
-                CLIApp.getInstance().actualPage = Page.HELP;
-                break;
-            case "x" :
-                CLIApp.getInstance().actualPage = Page.QUIT;
-                break;
             case "1":
-                CLIApp.getInstance().actualPage = Page.TASK_ADD;
+                assignUserToTask();
                 break;
             case "2":
-                CLIApp.getInstance().actualPage = Page.TASK_DELETE;
+                unassignUserToTask();
                 break;
             case "3":
-                CLIApp.getInstance().actualPage = Page.TASK_UPDATE;
+                assignFlagToTask();
                 break;
             case "4":
-                CLIApp.getInstance().actualPage = Page.TASK_USERS;
+                unassignFlagToTask();
                 break;
             case "5":
-                CLIApp.getInstance().actualPage = Page.TASK_FLAGS;
+                updateTask();
+                break;
+            case "6":
+                deleteTask();
+                break;
+            case "q":
+                CLIApp.getInstance().actualPage = Page.TASK_MENU;
+                break;
+            default:
+                System.out.println("Merci de renseigner un choix valide");
                 break;
         }
     }
 
+    private void updateTask() throws IOException {
+        Task taskUp = new Task(Trello.getInstance().currentTask);
+
+        System.out.print(
+                "MODIFICATION D'UNE TACHE\n" +
+                "Laisser le champ vide si vous ne voulez pas apporter de modification\n" +
+                "{\n" +
+                "    Nom : "
+        );
+        String name = CLIApp.getInstance().scanNextLine(false);
+        if(!name.equals("")) {
+            taskUp.name = name;
+        }
+        System.out.print(
+                "    Description : "
+        );
+        String description = CLIApp.getInstance().scanNextLine(false);
+        if(!description.equals("")) {
+            taskUp.description = description;
+        }
+        System.out.println("}");
+
+        ControllerTask.updateTask(Trello.getInstance().currentTask.name, taskUp);
+    }
+
+    private void deleteTask() throws IOException {
+        System.out.println(
+                "SUPPRESSION D'UNE TACHE\n" +
+                        "Etes-vous sûr de vouloir supprimer cette tâche ?\n" +
+                        "  [y] - Oui\n" +
+                        "  [n] - Non"
+        );
+        switch (CLIApp.getInstance().scanChoice(true)) {
+            case "y":
+                ControllerTask.deleteTask(Trello.getInstance().currentTask.name);
+                CLIApp.getInstance().actualPage = Page.TASK_MENU;
+                break;
+            case "n":
+                CLIApp.getInstance().actualPage = Page.TASK;
+                break;
+            default:
+                System.out.println("Merci de renseigner un choix valide");
+                break;
+        }
+    }
+
+    private void assignUserToTask() throws IOException {
+        CLIUser.getInstance().screenListUser();
+        System.out.print(
+                "AFFECTER UN UTILISATEUR A LA TACHE\n" +
+                "Nom de l'utilisateur : "
+        );
+        String pseudo = CLIApp.getInstance().scanNextLine(false);
+        ControllerUser.assignUserToTask(pseudo, Trello.getInstance().currentTask.name);
+    }
+
+    private void unassignUserToTask() throws IOException {
+        System.out.print(
+                "RERIRER UN UTILISATEUR DE LA TACHE\n" +
+                "Nom de l'utilisateur : "
+        );
+        String pseudo = CLIApp.getInstance().scanNextLine(false);
+        ControllerUser.unassignUserToTask(pseudo, Trello.getInstance().currentTask.name);
+    }
+
+    private void assignFlagToTask() throws IOException {
+        CLIFlag.getInstance().screenListFlag();
+        System.out.print(
+                "AFFECTER UN TAG A LA TACHE\n" +
+                "Nom du tag : "
+        );
+        String name = CLIApp.getInstance().scanNextLine(false);
+        ControllerFlag.assignFlagToTask(name, Trello.getInstance().currentTask.name);
+    }
+
+    private void unassignFlagToTask() throws IOException {
+        System.out.print(
+                "RERIRER UN TAG DE LA TACHE\n" +
+                "Nom du tag : "
+        );
+        String name = CLIApp.getInstance().scanNextLine(false);
+        ControllerFlag.unassignFlagToTask(name, Trello.getInstance().currentTask.name);
+    }
+
+    /**
+     * Retourne l'instance du singleton
+     * Si elle n'éxiste pas, créer une instance et la retourne
+     * @return instance du singleton
+     */
     public static CLITask getInstance() {
         if (instance == null) {
             instance = new CLITask();
