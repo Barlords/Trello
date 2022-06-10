@@ -38,6 +38,7 @@ public class CLIApp {
                     CLITask.getInstance().actionMenuTask();
                     break;
                 case FLAG:
+                    CLIFlag.getInstance().actionFlag();
                     break;
                 case FLAG_MENU:
                     CLIFlag.getInstance().actionMenuFlag();
@@ -76,23 +77,11 @@ public class CLIApp {
     public void actionAppMenu() {
         screenAppMenu();
         String choice = scanChoice(true);
-        try {
-            int value = Integer.parseInt(choice);
+        if (choice.equals("1")) {
             CLIApp.getInstance().actualPage = Page.TRELLO;
-        } catch (NumberFormatException e) {
-            switch(choice) {
-                case "x":
-                    CLIApp.getInstance().actualPage = Page.QUIT;
-                    break;
-                default:
-                    System.out.println(choice + " n'est pas un choix valide");
-            }
         }
-    }
-
-    public void checkBDDTrello(int id) {
-        if(id == 1) {
-            CLIApp.getInstance().actualPage = Page.TRELLO;
+        else {
+            System.out.println("Merci de renseigner un choix valide");
         }
     }
 

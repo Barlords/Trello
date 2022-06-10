@@ -1,12 +1,9 @@
 package front.cli;
 
 import back.controller.ControllerFlag;
-import back.controller.ControllerTask;
-import back.controller.ControllerUser;
 import back.objects.Flag;
 import back.objects.Page;
 import back.objects.Trello;
-import back.objects.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,7 +34,7 @@ public class CLIFlag {
     }
 
     // SCREENS
-    private void screenFlag(Flag flag) throws IOException {
+    private void screenFlag(Flag flag) {
         String str =
                 CLIUtils.getInstance().getToolBar() +
                 "    |    TAG !                                                                                  |\n" +
