@@ -40,7 +40,7 @@ public class CLIApp {
                 case FLAG:
                     break;
                 case FLAG_MENU:
-                    CLIFlag.getInstance().menuFlag();
+                    CLIFlag.getInstance().actionMenuFlag();
                     break;
                 case HELP:
                     break;

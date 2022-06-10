@@ -58,7 +58,9 @@ public class CLITrello {
         Trello.getInstance()._flags = ControllerFlag.getFlags();
         screenTrello();
         String choice = CLIApp.getInstance().scanChoice(true);
-        CLIUtils.getInstance().actionToolBar(choice);
+        if (!CLIUtils.getInstance().actionToolBar(choice)) {
+            System.out.println("Merci de renseigner un choix valide");
+        }
     }
 
     /**

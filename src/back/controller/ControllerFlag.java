@@ -190,7 +190,7 @@ public class ControllerFlag {
     }
 
 
-
+    // REQUEST
     public static int createFlag(Flag flag) throws IOException {
 
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/flags/create"));
@@ -217,10 +217,10 @@ public class ControllerFlag {
         return 1;
     }
 
-    public static int updateFlag(String name, Flag flag) throws IOException {
+    public static int updateFlag(String name, Flag flagUp) throws IOException {
         HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/flags/update?name=" + name));
 
-        APIRequest.writeBodyRequest(con, flag.toJSON());
+        APIRequest.writeBodyRequest(con, flagUp.toJSON());
 
         String response = APIRequest.getResponse(con);
 
@@ -236,7 +236,7 @@ public class ControllerFlag {
 
         String response = APIRequest.getResponse(con);
 
-        Flag[] flags = new Gson().fromJson(response.toString(), Flag[].class);
+        Flag[] flags = new Gson().fromJson(response, Flag[].class);
 
         return Arrays.asList(flags);
     }
@@ -247,10 +247,57 @@ public class ControllerFlag {
 
         String response = APIRequest.getResponse(con);
 
+        System.out.println(response);
+
         Flag flag = new Gson().fromJson(response, Flag.class);
 
         return flag;
     }
 
+    public static List<Task> getTasksByFlag(String name) throws IOException {
 
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/getTasksByFlag?name=" + name));
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        Task[] tasks = new Gson().fromJson(response, Task[].class);
+
+        return Arrays.asList(tasks);
+    }
+
+    public static int assignFlagToTask(String name, String taskName) throws IOException {
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/assignFlagToTask"));
+
+        APIRequest.writeBodyRequest(con, String.format(
+                "{" +
+                        "\"flagName\": \"%s\", " +
+                        "\"taskName\": \"%s\"" +
+                        "}",
+                name, taskName));
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
+
+    public static int unassignFlagToTask(String name, String taskName) throws IOException {
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/unassignFlagToTask"));
+
+        APIRequest.writeBodyRequest(con, String.format(
+                "{" +
+                        "\"flagName\": \"%s\", " +
+                        "\"taskName\": \"%s\"" +
+                        "}",
+                name, taskName));
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+
+        return 1;
+    }
 }

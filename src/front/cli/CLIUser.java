@@ -47,7 +47,7 @@ public class CLIUser {
         return str;
     }
 
-    // SCREEN
+    // SCREENS
     public void screenUser(User user) throws IOException {
         String str =
                 CLIUtils.getInstance().getToolBar() +
@@ -67,7 +67,6 @@ public class CLIUser {
     }
 
     public void screenUserMenu() {
-
         String str =
                 CLIUtils.getInstance().getToolBar() +
                 "    |    MENU UTILISATEUR !                                                                     |\n" +
@@ -79,6 +78,7 @@ public class CLIUser {
                 "    |                                                                                           |\n" +
                 getListUsersToPrint() +
                 CLIUtils.getInstance().getEndPage();
+
         System.out.println(str);
     }
 
@@ -95,17 +95,18 @@ public class CLIUser {
         Trello.getInstance()._users = ControllerUser.getUsers();
         screenUserMenu();
         String choice = CLIApp.getInstance().scanChoice(true);
-        CLIUtils.getInstance().actionToolBar(choice);
-        switch(choice) {
-            case "1":
-                addUser();
-                break;
-            case "2":
-                consultUser();
-                break;
-            default:
-                System.out.println("Merci de renseigner un choix valide");
-                break;
+        if (!CLIUtils.getInstance().actionToolBar(choice)) {
+            switch (choice) {
+                case "1":
+                    addUser();
+                    break;
+                case "2":
+                    consultUser();
+                    break;
+                default:
+                    System.out.println("Merci de renseigner un choix valide");
+                    break;
+            }
         }
     }
 
@@ -129,8 +130,8 @@ public class CLIUser {
 
         System.out.println("CONSULTATION D'UN UTILISATEUR !");
         System.out.print("Nom de l'utilisateur à consulter : ");
-        String choice = CLIApp.getInstance().scanNextLine(false);
-        User user = ControllerUser.getUserByPseudo(choice);
+        String pseudo = CLIApp.getInstance().scanNextLine(false);
+        User user = ControllerUser.getUserByPseudo(pseudo);
         if(user == null) {
             System.out.println("Utilisateur non trouvé");
             CLIApp.getInstance().actualPage = Page.USER_MENU;
@@ -144,68 +145,30 @@ public class CLIUser {
     public void actionUser() throws IOException {
         screenUser(Trello.getInstance().currentUser);
         String choice = CLIApp.getInstance().scanChoice(true);
-        CLIUtils.getInstance().actionToolBar(choice);
-        switch(choice) {
-            case "1":
-                assignUserToTask();
-                CLIApp.getInstance().actualPage = Page.USER;
-                break;
-            case "2":
-                unassignUserToTask();
-                CLIApp.getInstance().actualPage = Page.USER;
-                break;
-            case "3":
-                updateUser();
-                CLIApp.getInstance().actualPage = Page.USER;
-                break;
-            case "4":
-                deleteUser();
-                break;
-            case "q":
-                CLIApp.getInstance().actualPage = Page.USER_MENU;
-                break;
-            default:
-                System.out.println("Merci de renseigner un choix valide");
-                break;
-        }
-    }
-
-    private void updateUser() throws IOException {
-        User userUp = new User(Trello.getInstance().currentUser);
-
-        System.out.print(
-                "MODIFICATION D'UN UTILISATEUR\n" +
-                "Laisser le champ vide si vous ne voulez pas apporter de modification\n" +
-                "{\n" +
-                "    Pseudo : "
-        );
-        String pseudo = CLIApp.getInstance().scanNextLine(false);
-        if(!pseudo.equals("")) {
-            userUp.pseudo = pseudo;
-        }
-        System.out.println("}");
-
-        ControllerUser.updateUser(Trello.getInstance().currentUser.pseudo, userUp);
-    }
-
-    private void deleteUser() throws IOException {
-        System.out.println(
-                "SUPPRESSION DE L'UTILISATEUR\n" +
-                "Etes-vous sûr de vouloir supprimer cette utilisateur ?\n" +
-                "  [y] - Oui\n" +
-                "  [n] - Non"
-        );
-        switch(CLIApp.getInstance().scanChoice(true)) {
-            case "y":
-                ControllerUser.deleteUser(Trello.getInstance().currentUser.pseudo);
-                CLIApp.getInstance().actualPage = Page.USER_MENU;
-                break;
-            case "n":
-                CLIApp.getInstance().actualPage = Page.USER;
-                break;
-            default:
-                System.out.println("Merci de renseigner un choix valide");
-                break;
+        if (!CLIUtils.getInstance().actionToolBar(choice)) {
+            switch (choice) {
+                case "1":
+                    assignUserToTask();
+                    CLIApp.getInstance().actualPage = Page.USER;
+                    break;
+                case "2":
+                    unassignUserToTask();
+                    CLIApp.getInstance().actualPage = Page.USER;
+                    break;
+                case "3":
+                    updateUser();
+                    CLIApp.getInstance().actualPage = Page.USER;
+                    break;
+                case "4":
+                    deleteUser();
+                    break;
+                case "q":
+                    CLIApp.getInstance().actualPage = Page.USER_MENU;
+                    break;
+                default:
+                    System.out.println("Merci de renseigner un choix valide");
+                    break;
+            }
         }
     }
 
@@ -226,6 +189,45 @@ public class CLIUser {
         );
         String taskName = new Scanner(System.in).nextLine();
         ControllerUser.unassignUserToTask(Trello.getInstance().currentUser.pseudo, taskName);
+    }
+
+    private void updateUser() throws IOException {
+        User userUp = new User(Trello.getInstance().currentUser);
+
+        System.out.print(
+                "MODIFICATION D'UN UTILISATEUR\n" +
+                        "Laisser le champ vide si vous ne voulez pas apporter de modification\n" +
+                        "{\n" +
+                        "    Pseudo : "
+        );
+        String pseudo = CLIApp.getInstance().scanNextLine(false);
+        if(!pseudo.equals("")) {
+            userUp.pseudo = pseudo;
+        }
+        System.out.println("}");
+
+        ControllerUser.updateUser(Trello.getInstance().currentUser.pseudo, userUp);
+    }
+
+    private void deleteUser() throws IOException {
+        System.out.println(
+                "SUPPRESSION DE L'UTILISATEUR\n" +
+                        "Etes-vous sûr de vouloir supprimer cet utilisateur ?\n" +
+                        "  [y] - Oui\n" +
+                        "  [n] - Non"
+        );
+        switch(CLIApp.getInstance().scanChoice(true)) {
+            case "y":
+                ControllerUser.deleteUser(Trello.getInstance().currentUser.pseudo);
+                CLIApp.getInstance().actualPage = Page.USER_MENU;
+                break;
+            case "n":
+                CLIApp.getInstance().actualPage = Page.USER;
+                break;
+            default:
+                System.out.println("Merci de renseigner un choix valide");
+                break;
+        }
     }
 
 

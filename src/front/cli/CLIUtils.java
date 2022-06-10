@@ -45,7 +45,7 @@ public class CLIUtils {
      * Actualise la page si l'action provient de la toolbar
      * @param choice    action sélectionnée
      */
-    public void actionToolBar(String choice) {
+    public boolean actionToolBar(String choice) {
         switch(choice) {
             case "a":
                 CLIApp.getInstance().actualPage = Page.TRELLO;
@@ -66,8 +66,9 @@ public class CLIUtils {
                 CLIApp.getInstance().actualPage = Page.QUIT;
                 break;
             default:
-                break;
+                return false;
         }
+        return true;
     }
 
     /**

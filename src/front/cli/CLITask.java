@@ -67,7 +67,7 @@ public class CLITask {
         return str;
     }
 
-    // SCREEN
+    // SCREENS
     public void screenTask(Task task) throws IOException {
         String str =
                 CLIUtils.getInstance().getToolBar() +
@@ -117,17 +117,18 @@ public class CLITask {
         Trello.getInstance()._tasks = ControllerTask.getTasks();
         screenTaskMenu();
         String choice = CLIApp.getInstance().scanChoice(true);
-        CLIUtils.getInstance().actionToolBar(choice);
-        switch (choice) {
-            case "1":
-                addTask();
-                break;
-            case "2":
-                consultTask();
-                break;
-            default:
-                System.out.println("Merci de renseigner un choix valide");
-                break;
+        if (!CLIUtils.getInstance().actionToolBar(choice)) {
+            switch (choice) {
+                case "1":
+                    addTask();
+                    break;
+                case "2":
+                    consultTask();
+                    break;
+                default:
+                    System.out.println("Merci de renseigner un choix valide");
+                    break;
+            }
         }
     }
 
@@ -170,78 +171,33 @@ public class CLITask {
     public void actionTask() throws IOException {
         screenTask(Trello.getInstance().currentTask);
         String choice = CLIApp.getInstance().scanChoice(true);
-        CLIUtils.getInstance().actionToolBar(choice);
-        switch(choice) {
-            case "1":
-                assignUserToTask();
-                break;
-            case "2":
-                unassignUserToTask();
-                break;
-            case "3":
-                assignFlagToTask();
-                break;
-            case "4":
-                unassignFlagToTask();
-                break;
-            case "5":
-                updateTask();
-                break;
-            case "6":
-                deleteTask();
-                break;
-            case "q":
-                CLIApp.getInstance().actualPage = Page.TASK_MENU;
-                break;
-            default:
-                System.out.println("Merci de renseigner un choix valide");
-                break;
-        }
-    }
-
-    private void updateTask() throws IOException {
-        Task taskUp = new Task(Trello.getInstance().currentTask);
-
-        System.out.print(
-                "MODIFICATION D'UNE TACHE\n" +
-                "Laisser le champ vide si vous ne voulez pas apporter de modification\n" +
-                "{\n" +
-                "    Nom : "
-        );
-        String name = CLIApp.getInstance().scanNextLine(false);
-        if(!name.equals("")) {
-            taskUp.name = name;
-        }
-        System.out.print(
-                "    Description : "
-        );
-        String description = CLIApp.getInstance().scanNextLine(false);
-        if(!description.equals("")) {
-            taskUp.description = description;
-        }
-        System.out.println("}");
-
-        ControllerTask.updateTask(Trello.getInstance().currentTask.name, taskUp);
-    }
-
-    private void deleteTask() throws IOException {
-        System.out.println(
-                "SUPPRESSION D'UNE TACHE\n" +
-                        "Etes-vous sûr de vouloir supprimer cette tâche ?\n" +
-                        "  [y] - Oui\n" +
-                        "  [n] - Non"
-        );
-        switch (CLIApp.getInstance().scanChoice(true)) {
-            case "y":
-                ControllerTask.deleteTask(Trello.getInstance().currentTask.name);
-                CLIApp.getInstance().actualPage = Page.TASK_MENU;
-                break;
-            case "n":
-                CLIApp.getInstance().actualPage = Page.TASK;
-                break;
-            default:
-                System.out.println("Merci de renseigner un choix valide");
-                break;
+        if (!CLIUtils.getInstance().actionToolBar(choice)) {
+            switch (choice) {
+                case "1":
+                    assignUserToTask();
+                    break;
+                case "2":
+                    unassignUserToTask();
+                    break;
+                case "3":
+                    assignFlagToTask();
+                    break;
+                case "4":
+                    unassignFlagToTask();
+                    break;
+                case "5":
+                    updateTask();
+                    break;
+                case "6":
+                    deleteTask();
+                    break;
+                case "q":
+                    CLIApp.getInstance().actualPage = Page.TASK_MENU;
+                    break;
+                default:
+                    System.out.println("Merci de renseigner un choix valide");
+                    break;
+            }
         }
     }
 
@@ -281,6 +237,52 @@ public class CLITask {
         );
         String name = CLIApp.getInstance().scanNextLine(false);
         ControllerFlag.unassignFlagToTask(name, Trello.getInstance().currentTask.name);
+    }
+
+    private void updateTask() throws IOException {
+        Task taskUp = new Task(Trello.getInstance().currentTask);
+
+        System.out.print(
+                "MODIFICATION D'UNE TACHE\n" +
+                        "Laisser le champ vide si vous ne voulez pas apporter de modification\n" +
+                        "{\n" +
+                        "    Nom : "
+        );
+        String name = CLIApp.getInstance().scanNextLine(false);
+        if(!name.equals("")) {
+            taskUp.name = name;
+        }
+        System.out.print(
+                "    Description : "
+        );
+        String description = CLIApp.getInstance().scanNextLine(false);
+        if(!description.equals("")) {
+            taskUp.description = description;
+        }
+        System.out.println("}");
+
+        ControllerTask.updateTask(Trello.getInstance().currentTask.name, taskUp);
+    }
+
+    private void deleteTask() throws IOException {
+        System.out.println(
+                "SUPPRESSION D'UNE TACHE\n" +
+                        "Etes-vous sûr de vouloir supprimer cette tâche ?\n" +
+                        "  [y] - Oui\n" +
+                        "  [n] - Non"
+        );
+        switch (CLIApp.getInstance().scanChoice(true)) {
+            case "y":
+                ControllerTask.deleteTask(Trello.getInstance().currentTask.name);
+                CLIApp.getInstance().actualPage = Page.TASK_MENU;
+                break;
+            case "n":
+                CLIApp.getInstance().actualPage = Page.TASK;
+                break;
+            default:
+                System.out.println("Merci de renseigner un choix valide");
+                break;
+        }
     }
 
     /**
