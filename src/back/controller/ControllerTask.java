@@ -187,20 +187,20 @@ public class ControllerTask {
     }
 
     @FXML
-    public int deleteTaskFxml() throws IOException {
+    public void deleteTaskFxml() throws IOException {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
-        return deleteTask(tf_name.getText());
+        deleteTask(tf_name.getText());
     }
 
     @FXML
-    public int createTaskFxml() throws IOException {
+    public void createTaskFxml() throws IOException {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
         TextField tf_description = (TextField) GUIApp.stage.getScene().lookup("#description");
-        return createTask(new Task(tf_name.getText(), tf_description.getText()));
+        createTask(new Task(tf_name.getText(), tf_description.getText()));
     }
 
 
-    public static int createTask(Task task) throws IOException {
+    public static void createTask(Task task) throws IOException {
 
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL(References.URL_API + "/tasks/create"));
 
@@ -209,11 +209,9 @@ public class ControllerTask {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int deleteTask(String name) throws IOException {
+    public static void deleteTask(String name) throws IOException {
 
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL(References.URL_API + "/tasks/delete"));
 
@@ -222,11 +220,9 @@ public class ControllerTask {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int updateTask(String name, Task task) throws IOException {
+    public static void updateTask(String name, Task task) throws IOException {
         HttpURLConnection con = APIRequest.Update.getConByURL(new URL(References.URL_API + "/tasks/update?name=" + APIRequest.formatToRequestURL(name)));
 
         APIRequest.writeBodyRequest(con, task.toJSON());
@@ -234,8 +230,6 @@ public class ControllerTask {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
     public static List<Task> getTasks() throws IOException {
@@ -295,7 +289,7 @@ public class ControllerTask {
         return Arrays.asList(flags);
     }
 
-    public static int unassignUserToTask(User user, Task task) throws IOException {
+    public static void unassignUserToTask(User user, Task task) throws IOException {
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL(References.URL_API + "/unassignUserToTask"));
 
         APIRequest.writeBodyRequest(con, "{\"userPseudo\"=\"" + APIRequest.formatToRequestURL(user.pseudo) + "\",\"taskName\"=\"" + APIRequest.formatToRequestURL(task.name) +"\"}");
@@ -303,11 +297,9 @@ public class ControllerTask {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int assignFlagToTask(Flag flag, Task task) throws IOException {
+    public static void assignFlagToTask(Flag flag, Task task) throws IOException {
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL(References.URL_API + "/assignFlagToTask"));
 
         APIRequest.writeBodyRequest(con, "{\"flagName\"=\"" + APIRequest.formatToRequestURL(flag.name) + "\",\"taskName\"=\"" + APIRequest.formatToRequestURL(task.name) +"\"}");
@@ -315,11 +307,9 @@ public class ControllerTask {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int unassignFlagToTask(Flag flag, Task task) throws IOException {
+    public static void unassignFlagToTask(Flag flag, Task task) throws IOException {
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL(References.URL_API + "/unassignFlagToTask"));
 
         APIRequest.writeBodyRequest(con, "{\"flagName\"=\"" + APIRequest.formatToRequestURL(flag.name) + "\",\"taskName\"=\"" + APIRequest.formatToRequestURL(task.name) +"\"}");
@@ -327,8 +317,6 @@ public class ControllerTask {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
 }

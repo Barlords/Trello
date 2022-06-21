@@ -34,7 +34,7 @@ public class CLIFlag {
     }
 
     // SCREENS
-    private void screenFlag(Flag flag) {
+    public void screenFlag(Flag flag) {
         String str =
                 CLIUtils.getInstance().getToolBar() +
                 "    |    TAG !                                                                                  |\n" +
@@ -50,7 +50,7 @@ public class CLIFlag {
         System.out.println(str);
     }
 
-    private void screenFlagMenu() throws IOException {
+    public void screenFlagMenu() throws IOException {
         String str =
                 CLIUtils.getInstance().getToolBar() +
                 "    |    MENU TAG !                                                                             |\n" +
@@ -66,7 +66,7 @@ public class CLIFlag {
         System.out.println(str);
     }
 
-    private void screenListFlag() throws IOException {
+    public void screenListFlag() throws IOException {
         String str =
                 CLIUtils.getInstance().getHeader() +
                 getListFlagsToPrint() +

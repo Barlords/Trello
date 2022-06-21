@@ -51,7 +51,7 @@ public class CLIUser {
     public void screenUser(User user) throws IOException {
         String str =
                 CLIUtils.getInstance().getToolBar() +
-                "    |    UTILISATEUR                                                                          |\n" +
+                "    |    UTILISATEUR                                                                            |\n" +
                 String.format("    |        Pseudo : %-70s    |\n", "'" + user.pseudo + "'") +
                 "    |                                                                                           |\n" +
                 getListTasksAssignedToUserToPrint() +

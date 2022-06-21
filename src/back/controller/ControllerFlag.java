@@ -178,20 +178,20 @@ public class ControllerFlag {
     }
 
     @FXML
-    public int deleteFlagFxml() throws IOException {
+    public void deleteFlagFxml() throws IOException {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
-        return deleteFlag(tf_name.getText());
+        deleteFlag(tf_name.getText());
     }
 
     @FXML
-    public int createTaskFxml() throws  IOException {
+    public void createTaskFxml() throws  IOException {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
-        return createFlag(new Flag(tf_name.getText()));
+        createFlag(new Flag(tf_name.getText()));
     }
 
 
     // REQUEST
-    public static int createFlag(Flag flag) throws IOException {
+    public static void createFlag(Flag flag) throws IOException {
 
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/flags/create"));
 
@@ -200,11 +200,9 @@ public class ControllerFlag {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int deleteFlag(String name) throws IOException {
+    public static void deleteFlag(String name) throws IOException {
 
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/flags/delete"));
 
@@ -213,11 +211,9 @@ public class ControllerFlag {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int updateFlag(String name, Flag flagUp) throws IOException {
+    public static void updateFlag(String name, Flag flagUp) throws IOException {
         HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/flags/update?name=" + name));
 
         APIRequest.writeBodyRequest(con, flagUp.toJSON());
@@ -225,8 +221,6 @@ public class ControllerFlag {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
     public static List<Flag> getFlags() throws IOException {
@@ -267,7 +261,7 @@ public class ControllerFlag {
         return Arrays.asList(tasks);
     }
 
-    public static int assignFlagToTask(String name, String taskName) throws IOException {
+    public static void assignFlagToTask(String name, String taskName) throws IOException {
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/assignFlagToTask"));
 
         APIRequest.writeBodyRequest(con, String.format(
@@ -280,11 +274,9 @@ public class ControllerFlag {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int unassignFlagToTask(String name, String taskName) throws IOException {
+    public static void unassignFlagToTask(String name, String taskName) throws IOException {
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/unassignFlagToTask"));
 
         APIRequest.writeBodyRequest(con, String.format(
@@ -297,7 +289,5 @@ public class ControllerFlag {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 }

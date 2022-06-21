@@ -175,20 +175,20 @@ public class ControllerUser {
     }
 
     @FXML
-    public int deleteUserFxml() throws IOException {
+    public void deleteUserFxml() throws IOException {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#pseudo");
-        return deleteUser(tf_name.getText());
+        deleteUser(tf_name.getText());
     }
 
     @FXML
-    public int createUserFxml() throws  IOException {
+    public void createUserFxml() throws  IOException {
         TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#pseudo");
-        return createUser(new User(tf_name.getText()));
+        createUser(new User(tf_name.getText()));
     }
 
 
     // REQUEST
-    public static int createUser(User user) throws IOException {
+    public static void createUser(User user) throws IOException {
 
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/users/create"));
 
@@ -197,11 +197,9 @@ public class ControllerUser {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int deleteUser(String pseudo) throws IOException {
+    public static void deleteUser(String pseudo) throws IOException {
 
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/users/delete"));
 
@@ -210,11 +208,9 @@ public class ControllerUser {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int updateUser(String pseudo, User userUp) throws IOException {
+    public static void updateUser(String pseudo, User userUp) throws IOException {
         HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/users/update?pseudo=" + pseudo));
 
         APIRequest.writeBodyRequest(con, userUp.toJSON());
@@ -222,8 +218,6 @@ public class ControllerUser {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
     public static List<User> getUsers() throws IOException {
@@ -265,7 +259,7 @@ public class ControllerUser {
         return Arrays.asList(tasks);
     }
 
-    public static int assignUserToTask(String pseudo, String taskName) throws IOException {
+    public static void assignUserToTask(String pseudo, String taskName) throws IOException {
         HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/assignUserToTask"));
 
         APIRequest.writeBodyRequest(con, String.format(
@@ -278,11 +272,9 @@ public class ControllerUser {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
-    public static int unassignUserToTask(String pseudo, String taskName) throws IOException {
+    public static void unassignUserToTask(String pseudo, String taskName) throws IOException {
         HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/unassignUserToTask"));
 
         APIRequest.writeBodyRequest(con, String.format(
@@ -295,8 +287,6 @@ public class ControllerUser {
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
-
-        return 1;
     }
 
 
