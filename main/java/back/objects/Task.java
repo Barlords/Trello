@@ -2,7 +2,6 @@ package back.objects;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Task {

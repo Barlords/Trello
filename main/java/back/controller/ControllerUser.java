@@ -1,34 +1,28 @@
 package back.controller;
 
 import app.References;
-import back.objects.Flag;
 import back.objects.Task;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import front.gui.flag.GUIFlag;
+import front.gui.user.GUIUser;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import front.gui.main.GUIApp;
+import back.objects.User;
 import front.gui.task.GuiTask;
-import front.gui.user.GUIUser;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import middleware.requests.APIRequest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ControllerFlag {
+public class ControllerUser {
 
     /*
     #####################
@@ -149,6 +143,7 @@ public class ControllerFlag {
         goToFrameFlag("delete");
     }
 
+
     private void goToFrameFlag(String action) throws IOException {
         switch (action) {
             case "viewAll" :
@@ -173,84 +168,85 @@ public class ControllerFlag {
     #####################
      */
     @FXML
-    public List<Flag> getFlagsFxml() throws IOException {
-        return getFlags();
+    public List<User> getUsersFxml() throws IOException {
+        return getUsers();
     }
 
     @FXML
-    public void deleteFlagFxml() throws IOException {
-        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
-        deleteFlag(tf_name.getText());
+    public void deleteUserFxml() throws IOException {
+        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#pseudo");
+        deleteUser(tf_name.getText());
     }
 
     @FXML
-    public void createTaskFxml() throws  IOException {
-        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#name");
-        createFlag(new Flag(tf_name.getText()));
+    public void createUserFxml() throws  IOException {
+        TextField tf_name = (TextField) GUIApp.stage.getScene().lookup("#pseudo");
+        createUser(new User(tf_name.getText()));
     }
 
 
     // REQUEST
-    public static void createFlag(Flag flag) throws IOException {
+    public static void createUser(User user) throws IOException {
 
-        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/flags/create"));
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/users/create"));
 
-        APIRequest.writeBodyRequest(con, flag.toJSON());
-
-        String response = APIRequest.getResponse(con);
-
-        System.out.println(response);
-    }
-
-    public static void deleteFlag(String name) throws IOException {
-
-        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/flags/delete"));
-
-        APIRequest.writeBodyRequest(con, "{\"name\":\"" + name + "\"}");
+        APIRequest.writeBodyRequest(con, user.toJSON());
 
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
     }
 
-    public static void updateFlag(String name, Flag flagUp) throws IOException {
-        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/flags/update?name=" + name));
+    public static void deleteUser(String pseudo) throws IOException {
 
-        APIRequest.writeBodyRequest(con, flagUp.toJSON());
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/users/delete"));
+
+        APIRequest.writeBodyRequest(con, "{\"pseudo\":\"" + pseudo + "\"}");
+
+        String response = APIRequest.getResponse(con);
+
+        System.out.println(response);
+    }
+
+    public static void updateUser(String pseudo, User userUp) throws IOException {
+        HttpURLConnection con = APIRequest.Update.getConByURL(new URL (References.URL_API + "/users/update?pseudo=" + pseudo));
+
+        APIRequest.writeBodyRequest(con, userUp.toJSON());
 
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
     }
 
-    public static List<Flag> getFlags() throws IOException {
-        System.out.println(References.URL_API + "/flags/getAll");
+    public static List<User> getUsers() throws IOException {
 
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/flags/getAll"));
+        System.out.println(References.URL_API + "/users/getAll");
+
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/users/getAll"));
 
         String response = APIRequest.getResponse(con);
 
-        Flag[] flags = new Gson().fromJson(response, Flag[].class);
+        User[] users = new Gson().fromJson(response, User[].class);
 
-        return Arrays.asList(flags);
+        return Arrays.asList(users);
     }
 
-    public static Flag getFlagByName(String name) throws IOException {
+    public static User getUserByPseudo(String pseudo) throws IOException {
 
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/flags/getByName?name=" + name));
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/users/getByPseudo?pseudo=" + pseudo));
 
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
 
-        Flag flag = new Gson().fromJson(response, Flag.class);
+        User user = new Gson().fromJson(response, User.class);
 
-        return flag;
+        return user;
     }
 
-    public static List<Task> getTasksByFlag(String name) throws IOException {
+    public static List<Task> getTasksAssignToUser(String pseudo) throws IOException {
 
-        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/getTasksByFlag?name=" + name));
+        HttpURLConnection con = APIRequest.Get.getConByURL(new URL (References.URL_API + "/getTasksAssignToUser?pseudo=" + pseudo));
 
         String response = APIRequest.getResponse(con);
 
@@ -261,33 +257,35 @@ public class ControllerFlag {
         return Arrays.asList(tasks);
     }
 
-    public static void assignFlagToTask(String name, String taskName) throws IOException {
-        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/assignFlagToTask"));
+    public static void assignUserToTask(String pseudo, String taskName) throws IOException {
+        HttpURLConnection con = APIRequest.Create.getConByURL(new URL (References.URL_API + "/assignUserToTask"));
 
         APIRequest.writeBodyRequest(con, String.format(
                 "{" +
-                        "\"flagName\": \"%s\", " +
+                        "\"pseudo\": \"%s\", " +
                         "\"taskName\": \"%s\"" +
-                        "}",
-                name, taskName));
+                "}",
+                pseudo, taskName));
 
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
     }
 
-    public static void unassignFlagToTask(String name, String taskName) throws IOException {
-        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/unassignFlagToTask"));
+    public static void unassignUserToTask(String pseudo, String taskName) throws IOException {
+        HttpURLConnection con = APIRequest.Delete.getConByURL(new URL (References.URL_API + "/unassignUserToTask"));
 
         APIRequest.writeBodyRequest(con, String.format(
                 "{" +
-                        "\"flagName\": \"%s\", " +
+                        "\"pseudo\": \"%s\", " +
                         "\"taskName\": \"%s\"" +
                         "}",
-                name, taskName));
+                pseudo, taskName));
 
         String response = APIRequest.getResponse(con);
 
         System.out.println(response);
     }
+
+
 }
