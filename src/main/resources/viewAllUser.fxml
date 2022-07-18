@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="back.controller.ControllerUser">
+   <MenuBar prefHeight="30.0" prefWidth="1000.0">
+      <Menu mnemonicParsing="false" text="Trello">
+         <MenuItem mnemonicParsing="false" onAction="#homeTrelloMenu" text="Suivi" />
+         <MenuItem mnemonicParsing="false" onAction="#quitTrelloMenu" text="Quitter" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="Utilisateur">
+         <MenuItem mnemonicParsing="false" onAction="#viewAllMembersMenu" text="Voir les Menbres du projet" />
+         <MenuItem mnemonicParsing="false" onAction="#addMemberMenu" text="Ajouter un Membre" />
+         <MenuItem mnemonicParsing="false" onAction="#deleteMemberMenu" text="Supprimer un Membre" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="Tâche">
+         <MenuItem mnemonicParsing="false" onAction="#viewAllTasksMenu" text="Voir les Tâches" />
+         <MenuItem mnemonicParsing="false" onAction="#addTaskMenu" text="Ajouter une Tâche" />
+         <MenuItem mnemonicParsing="false" onAction="#deleteTaskMenu" text="Supprimer une Tâche" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="Tag">
+         <MenuItem mnemonicParsing="false" onAction="#viewAllFlagsMenu" text="Voir les Tags" />
+         <MenuItem mnemonicParsing="false" onAction="#addFlagMenu" text="Ajouter un Tag" />
+         <MenuItem mnemonicParsing="false" onAction="#deleteFlagMenu" text="Supprimer un Tag" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="Aide">
+         <MenuItem mnemonicParsing="false" text="A propos du groupe" />
+      </Menu>
+   </MenuBar>
+
+   <Button layoutX="441.0" layoutY="287.0" mnemonicParsing="false" onAction="#getUsersFxml" text="Voir les Utilisateurs" />
+
+
+</AnchorPane>
